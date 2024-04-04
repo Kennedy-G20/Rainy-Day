@@ -1,0 +1,34 @@
+[
+    {
+        "description": "Tesco shop",
+        "transaction_direction": "outcome",
+        "amount": 35.60,
+        "category": "groceries",
+        "date": "2023-12-30",
+        "notes": []
+    },
+    {
+        "description": "Asda shop",
+        "transaction_direction": "outcome",
+        "amount": 49.95,
+        "category": "groceries",
+        "date": "2024-03-15",
+        "notes": []
+    },
+    {
+        "description": "Amazon",
+        "transaction_direction": "outcome",
+        "amount": 7.99,
+        "category": "subscriptions",
+        "date": "2024-02-30",
+        "notes": []
+    },
+    {
+        "description": "student loan",
+        "transaction_direction": "income",
+        "amount": 950,
+        "category": "loans",
+        "date": "2024-01-10",
+        "notes": []
+    }
+]
