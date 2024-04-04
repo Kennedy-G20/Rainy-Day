@@ -1,0 +1,34 @@
+<!-- <div *ngFor = "let transaction of transactions_list">
+    <p>
+        Description: {{transaction.description}} <br>
+        Amount: £{{transaction.amount}} <br>
+        Income/Outcone: {{transaction.transaction_direction}} <br>
+        Category: {{transaction.category}} <br>
+        Date: {{transaction.date}} <br>
+        Notes: {{transaction.notes}} <br>
+    </p> -->
+
+
+<div class="container">
+    <div *ngFor = "let transaction of transactions_list">
+      <div class="card text-white mb-3" style = "width: 50rem; margin: auto">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <div class="card-body">
+              {{transaction.description}}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card-body">
+              {{transaction.transaction_direction}}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card-body">
+              £{{transaction.amount}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
