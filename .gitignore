@@ -42,4 +42,6 @@ testem.log
 Thumbs.db
 
 
-./BackEnd/venv
+./BackEnd/venv/
+
+./BackEnd/__pycache__/
