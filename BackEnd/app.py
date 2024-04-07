@@ -5,6 +5,7 @@ import azure.cosmos.exceptions as exceptions
 import azure.cosmos.cosmos_client as cosmos_client
 import os
 import uuid
+from waitress import serve
 
 app = Flask(__name__)
 CORS(app)
@@ -104,4 +105,5 @@ def add_transaction(user_id):
     
     # comment
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True, host="0.0.0.0", port=5000)
+    # serve(app, host="0.0.0.0", port=5000)
