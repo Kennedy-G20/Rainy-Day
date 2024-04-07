@@ -9,7 +9,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./scripts
+    working-directory: ./BackEnd
 
 jobs:
 
@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag rainy-day -f BackEnd/Dockerfile
+      run: docker build . --file Dockerfile --tag rainy-day -f Dockerfile
     - name: Run the Docker image
       run: docker run -p 8080:8080 rainy-day
   
