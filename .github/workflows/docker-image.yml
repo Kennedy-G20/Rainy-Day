@@ -14,6 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Setup Directory
+      working-directory: ./BackEnd
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag rainy-day -f BackEnd/Dockerfile
     - name: Run the Docker image
