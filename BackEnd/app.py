@@ -103,7 +103,7 @@ def add_transaction(user_id):
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
     
 
-# edit transaction
+# EDIT transaction
 @app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods=["PUT"])
 def edit_transaction(user_id, transaction_id):
     if "description" in request.form and "transaction_direction" in request.form and "amount" in request.form and "category" in request.form and "date" in request.form:
@@ -124,6 +124,23 @@ def edit_transaction(user_id, transaction_id):
     else:
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
     
+
+# DELETE transaction
+@app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods=["DELETE"])
+def delete_transaction(user_id, transaction_id):
+    transaction_list = list(container.query_items(
+        f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}' AND r.id='{transaction_id}'",
+        enable_cross_partition_query=True,
+    ))
+    # number = len(transaction_list)
+    # string_number = str(number)
+    if len(transaction_list) >= 1:
+        response = container.delete_item(item=transaction_id, partition_key=user_id)
+        return make_response( jsonify( {} ), 204 )
+    # return make_response( jsonify( "Working:" + string_number ), 404 )
+    else:
+        return make_response( jsonify( { "error" : "Invalid transaction ID" } ), 404 )
+
 
 
 if __name__ == "__main__":
