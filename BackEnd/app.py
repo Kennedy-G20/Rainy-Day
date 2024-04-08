@@ -97,7 +97,7 @@ def add_transaction(user_id):
         }
         container.create_item(body=new_transaction)
 
-        new_transaction_link = "http://localhost:5000/api/transactions/{}/{}".format(user_id, id)
+        new_transaction_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/{}".format(user_id, id)
         return make_response( jsonify( { "url" : new_transaction_link} ), 201 )
     else:
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
@@ -119,7 +119,7 @@ def edit_transaction(user_id, transaction_id):
         item['category'] = category
         item['date'] = date
         container.upsert_item(body=item)
-        edited_transaction_link = "http://localhost:5000/api/transactions/{}/{}".format(user_id, transaction_id)
+        edited_transaction_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/{}".format(user_id, transaction_id)
         return make_response( jsonify( { "url" : edited_transaction_link} ), 201 )
     else:
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
