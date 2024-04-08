@@ -114,7 +114,7 @@ def edit_transaction(user_id, transaction_id):
         category = request.form["category"]
         date = request.form["date"]
         return make_response(jsonify( "Working" ), 200 )
-    #     item = container.read_item(item=transaction_id, partition_key=user_id)
+        item = container.read_item(item=transaction_id, partition_key=user_id)
     #     item['description'] = description
     #     item['transaction_direction'] = transaction_direction
     #     item['amount'] = amount
