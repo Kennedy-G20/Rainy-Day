@@ -106,23 +106,21 @@ def add_transaction(user_id):
 # edit transaction
 @app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods=["PUT"])
 def edit_transaction(user_id, transaction_id):
-    return make_response(jsonify( "Working" ), 200 )
     if "description" in request.form and "transaction_direction" in request.form and "amount" in request.form and "category" in request.form and "date" in request.form:
         description = request.form["description"]
         transaction_direction = request.form["transaction_direction"]
         amount = request.form["amount"]
         category = request.form["category"]
         date = request.form["date"]
-        return make_response(jsonify( "Working" ), 200 )
-    #     item = container.read_item(item=transaction_id, partition_key=user_id)
-    #     item['description'] = description
-    #     item['transaction_direction'] = transaction_direction
-    #     item['amount'] = amount
-    #     item['category'] = category
-    #     item['date'] = date
-    #     container.upsert_item(body=item)
-    #     edited_transaction_link = "http://localhost:5000/api/transactions/{}/{}".format(user_id, transaction_id)
-    #     return make_response( jsonify( { "url" : edited_transaction_link} ), 201 )
+        item = container.read_item(item=transaction_id, partition_key=user_id)
+        item['description'] = description
+        item['transaction_direction'] = transaction_direction
+        item['amount'] = amount
+        item['category'] = category
+        item['date'] = date
+        container.upsert_item(body=item)
+        edited_transaction_link = "http://localhost:5000/api/transactions/{}/{}".format(user_id, transaction_id)
+        return make_response( jsonify( { "url" : edited_transaction_link} ), 201 )
     else:
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
     
