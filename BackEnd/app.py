@@ -64,10 +64,10 @@ def show_all_user_transactions(user_id):
 
 
 # GET one transaction
-@app.route("/api/transactions/<string:user_id>/<string:id>", methods = ["GET"])
-def show_one_transaction(user_id, id):
+@app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods = ["GET"])
+def show_one_transaction(user_id, transaction_id):
     transaction_list = list(container.query_items(
-        f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}' AND r.id='{id}'",
+        f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}' AND r.id='{transaction_id}'",
         enable_cross_partition_query=True,
     ))
     for transaction in transaction_list:
