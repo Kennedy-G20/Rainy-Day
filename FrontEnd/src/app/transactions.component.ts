@@ -4,7 +4,8 @@ import { WebService } from './web.service';
 @Component({
   selector: 'transactions',
   templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.css']
+  styleUrls: ['./transactions.component.css'],
+  providers: [WebService]
 })
 export class TransactionsComponent {
 
