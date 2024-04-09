@@ -28,7 +28,7 @@ container = db.get_container_client("RainyDay")
 
 
 # GET transactions of all users
-@app.route("/api/transactions/all", methods = ["GET"])
+@app.route("/api/transactions", methods = ["GET"])
 def show_all_transactions():
     page_num, page_size = 1, 10
     if request.args.get('pn'):
