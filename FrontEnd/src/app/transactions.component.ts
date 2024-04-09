@@ -8,12 +8,12 @@ import { WebService } from './web.service';
 })
 export class TransactionsComponent {
 
-    transactions_list: any;
+    transactions_list: any = [];
 
     constructor(public webService: WebService) { }
 
     ngOnInit() {
-        this.webService.getTransactions();
+        this.transactions_list = this.webService.getTransactions();
     }
 
 }

@@ -10,7 +10,7 @@
 
 
 <div class="container">
-    <div *ngFor = "let transaction of webService.transactions_list">
+    <div *ngFor = "let transaction of transactions_list | async">
       <div class="card text-white mb-3" style = "width: 50rem; margin: auto">
         <div class="row g-0">
           <div class="col-md-4">
