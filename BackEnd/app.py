@@ -16,7 +16,6 @@ def jwt_required(func):
         header = request.headers.get('Authorization')
         if header:
             token = header.split(' ')[1]
-            print(token)
         if not header:
             return jsonify( { 'message' : 'Token is missing' }), 401
         try :
