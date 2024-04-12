@@ -6,6 +6,25 @@ import azure.cosmos.cosmos_client as cosmos_client
 import os
 import uuid
 from waitress import serve
+import jwt
+from functools import wraps
+
+
+def jwt_required(func):
+    @wraps(func)
+    def jwt_required_wrapper(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify( { 'message' : 'Token is missing' }), 401
+        try :
+            decoded_token_string = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+            user_id = (decoded_token_string['sub'])
+        except:
+            return jsonify( { 'message' : 'Token is unvalid' } ) , 401
+        return func(*args, **kwargs, user_id=user_id)
+    return jwt_required_wrapper
 
 app = Flask(__name__)
 CORS(app)
@@ -27,31 +46,33 @@ container = db.get_container_client("RainyDay")
 
 
 
-# GET transactions of all users
-@app.route("/api/transactions", methods = ["GET"])
-def show_all_transactions():
-    page_num, page_size = 1, 10
-    if request.args.get('pn'):
-        page_num = int(request.args.get('pn'))
-    if request.args.get('ps'):
-        page_size = int(request.args.get('ps'))
-    page_start = (page_size * (page_num - 1))
+# # GET transactions of all users
+# @app.route("/api/transactions", methods = ["GET"])
+# def show_all_transactions():
+#     page_num, page_size = 1, 10
+#     if request.args.get('pn'):
+#         page_num = int(request.args.get('pn'))
+#     if request.args.get('ps'):
+#         page_size = int(request.args.get('ps'))
+#     page_start = (page_size * (page_num - 1))
 
-    data_to_return = []
-    item_list = list(container.read_all_items(max_item_count=10))
-# for transaction in transactions.find().skip(page_start).limit(page_size):
-    for transaction in item_list:
-        transaction['id'] = str(transaction['id'])
-        for note in transaction['notes']:
-            note['id'] = str(note['id'])
-        data_to_return.append(transaction)
+#     data_to_return = []
+#     item_list = list(container.read_all_items(max_item_count=10))
+# # for transaction in transactions.find().skip(page_start).limit(page_size):
+#     for transaction in item_list:
+#         transaction['id'] = str(transaction['id'])
+#         for note in transaction['notes']:
+#             note['id'] = str(note['id'])
+#         data_to_return.append(transaction)
 
-    return make_response( jsonify( data_to_return ), 200 )
+#     return make_response( jsonify( data_to_return ), 200 )
 
 
 # GET all transactions of a single user
-@app.route("/api/transactions/<string:user_id>", methods = ["GET"])
+@app.route("/api/transactions", methods = ["GET"])
+@jwt_required
 def show_all_user_transactions(user_id):
+    print(user_id)
     user_trasactions = list(container.query_items(
         f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}'",
         enable_cross_partition_query=True,

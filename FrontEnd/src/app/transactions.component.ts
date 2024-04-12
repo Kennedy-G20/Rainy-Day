@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { WebService } from './web.service';
+import { AppComponent } from './app.component';
 
 @Component({
   selector: 'transactions',
@@ -14,7 +15,7 @@ export class TransactionsComponent {
     constructor(public webService: WebService) { }
 
     ngOnInit() {
-        this.transactions_list = this.webService.getTransactions();
+      this.transactions_list = this.webService.getTransactions();
     }
 
 }
