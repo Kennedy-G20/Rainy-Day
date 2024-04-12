@@ -5,7 +5,10 @@
       let-signOut="signOut"
     >
       <!-- <h1>Welcome {{ user.username }}!</h1> -->
+      <!-- <p>Your user ID is: {{ currentUserId }}</p> -->
       <router-outlet></router-outlet>
+      <p>Your user token is: {{ currentUserAccessToken }}</p>
+      <!-- <p>Your user token is: {{ currentUserIdToken }}</p> -->
       <button (click)="signOut()">Sign Out</button>
     </ng-template>
   </amplify-authenticator>
