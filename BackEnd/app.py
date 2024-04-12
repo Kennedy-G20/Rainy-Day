@@ -13,10 +13,11 @@ from functools import wraps
 def jwt_required(func):
     @wraps(func)
     def jwt_required_wrapper(*args, **kwargs):
-        token = None
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        if not token:
+        header = request.headers.get('Authorization')
+        if header:
+            token = header.split(' ')[1]
+            print(token)
+        if not header:
             return jsonify( { 'message' : 'Token is missing' }), 401
         try :
             decoded_token_string = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
