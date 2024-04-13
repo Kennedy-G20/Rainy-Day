@@ -6,6 +6,7 @@ import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { AppComponent } from './app.component';
 import awsconfig from '../aws-exports'
 import { TransactionsComponent } from './transactions.component';
+import { TransactionComponent } from './transaction.component';
 import { WebService } from './web.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -21,12 +22,16 @@ var routes: any = [
   {
     path: 'transactions',
     component: TransactionsComponent
+  },
+  {
+    path: 'transactions/:transaction_id',
+    component: TransactionComponent
   }
 ];
 
 @NgModule({
   declarations: [
-    AppComponent, TransactionsComponent, HomeComponent
+    AppComponent, TransactionsComponent, TransactionComponent, HomeComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

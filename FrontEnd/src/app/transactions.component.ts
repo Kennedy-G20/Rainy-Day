@@ -12,7 +12,7 @@ export class TransactionsComponent {
 
     constructor(public webService: WebService) { }
 
-    ngOnInit(): void {
+    ngOnInit() {
       fetchAuthSession().then((response
         ) => this.webService.getTransactions(
         response.tokens?.accessToken.toString() as string)
