@@ -15,7 +15,7 @@ export class TransactionComponent {
         private route: ActivatedRoute) { }
 
     ngOnInit(): void {
-    const transaction_id = this.route.snapshot.params['id'];
+    const transaction_id = this.route.snapshot.params['transaction_id'];
     console.log(transaction_id)
       fetchAuthSession().then((response
         ) => this.webService.getTransaction(
