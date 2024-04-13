@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { WebService } from './web.service';
-import { AppComponent } from './app.component';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 @Component({
   selector: 'transactions',
@@ -10,12 +10,13 @@ import { AppComponent } from './app.component';
 })
 export class TransactionsComponent {
 
-    transactions_list: any = [];
-
     constructor(public webService: WebService) { }
 
-    ngOnInit() {
-      this.transactions_list = this.webService.getTransactions();
+    ngOnInit(): void {
+      fetchAuthSession().then((response
+        ) => this.webService.getTransactions(
+        response.tokens?.accessToken.toString() as string)
+        ).catch((error) => console.log(error));
     }
 
 }
