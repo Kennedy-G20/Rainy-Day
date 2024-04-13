@@ -1,32 +1,20 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { fetchAuthSession } from 'aws-amplify/auth';
 
 @Injectable()
 export class WebService {
 
+    transactions_list: any;
+
     constructor(private http: HttpClient) { }
     
     currentUserAccessToken: any;
-    currentUserIdToken: any;
-
-    ngOnInit(): void {
-        this.getCurrentSession();
-      }
-      
-    async getCurrentSession() {
-        try {
-          const { accessToken, idToken } = (await fetchAuthSession({ forceRefresh: true })).tokens ?? {};
-          this.currentUserAccessToken = accessToken
-          this.currentUserIdToken = idToken
-        } catch (err) {
-          console.log(err);
-        }
-        return this.currentUserAccessToken
-      }
-
-    getTransactions() {
-        const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.currentUserAccessToken });
-        return this.http.get<any>('http://127.0.0.1:5000/api/transactions', { headers });
+        
+    getTransactions(accessToken: string) {
+        const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+        return this.http.get<any>('http://127.0.0.1:5000/api/transactions', { headers }
+        ).subscribe((response: any) => {
+            this.transactions_list = response
+        });
     }
 }

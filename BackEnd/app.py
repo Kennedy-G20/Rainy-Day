@@ -19,8 +19,8 @@ def jwt_required(func):
         if not header:
             return jsonify( { 'message' : 'Token is missing' }), 401
         try :
-            decoded_token_string = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
-            user_id = (decoded_token_string['sub'])
+            decoded_token = jwt.decode(token, verify=False)
+            user_id = (decoded_token['sub'])
         except:
             return jsonify( { 'message' : 'Token is unvalid' } ) , 401
         return func(*args, **kwargs, user_id=user_id)
@@ -72,7 +72,6 @@ container = db.get_container_client("RainyDay")
 @app.route("/api/transactions", methods = ["GET"])
 @jwt_required
 def show_all_user_transactions(user_id):
-    print(user_id)
     user_trasactions = list(container.query_items(
         f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}'",
         enable_cross_partition_query=True,
