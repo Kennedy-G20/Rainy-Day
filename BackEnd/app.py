@@ -84,7 +84,8 @@ def show_all_user_transactions(user_id):
 
 
 # GET one transaction
-@app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods = ["GET"])
+@app.route("/api/transactions/<string:transaction_id>", methods = ["GET"])
+@jwt_required
 def show_one_transaction(user_id, transaction_id):
     transaction_list = list(container.query_items(
         f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}' AND r.id='{transaction_id}'",
