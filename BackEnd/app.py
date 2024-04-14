@@ -72,8 +72,15 @@ container = db.get_container_client("RainyDay")
 @app.route("/api/transactions", methods = ["GET"])
 @jwt_required
 def show_all_user_transactions(user_id):
+    page_num, page_size = 1, 10
+    if request.args.get('pn'):
+        page_num = int(request.args.get('pn'))
+    if request.args.get('ps'):
+        page_size = int(request.args.get('ps'))
+    page_start = (page_size * (page_num - 1))
+
     user_trasactions = list(container.query_items(
-        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}'",
+        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' OFFSET {page_start} LIMIT {page_size}",
         enable_cross_partition_query=True,
     ))
 

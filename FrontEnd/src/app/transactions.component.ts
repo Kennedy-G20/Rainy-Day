@@ -10,13 +10,40 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 })
 export class TransactionsComponent {
 
+    page: number = 1;
+
     constructor(public webService: WebService) { }
 
     ngOnInit() {
+      if (sessionStorage['page']) {
+        this.page = Number(sessionStorage['page'])
+      }
       fetchAuthSession().then((response
         ) => this.webService.getTransactions(
-        response.tokens?.accessToken.toString() as string)
+        response.tokens?.accessToken.toString() as string, this.page)
         ).catch((error) => console.log(error));
     }
+
+    previousPage() {
+      if (this.page > 1) {
+          this.page = this.page - 1;
+          sessionStorage['page'] = this.page
+
+          fetchAuthSession().then((response
+            ) => this.webService.getTransactions(
+            response.tokens?.accessToken.toString() as string, this.page)
+            ).catch((error) => console.log(error));
+      }
+   }
+
+    nextPage() { 
+      this.page = this.page + 1;
+      sessionStorage['page'] = this.page
+
+      fetchAuthSession().then((response
+        ) => this.webService.getTransactions(
+        response.tokens?.accessToken.toString() as string, this.page)
+        ).catch((error) => console.log(error));
+  }
 
 }
