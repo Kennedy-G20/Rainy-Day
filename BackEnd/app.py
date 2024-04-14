@@ -73,7 +73,7 @@ container = db.get_container_client("RainyDay")
 @jwt_required
 def show_all_user_transactions(user_id):
     user_trasactions = list(container.query_items(
-        f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}'",
+        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}'",
         enable_cross_partition_query=True,
     ))
 
@@ -88,14 +88,14 @@ def show_all_user_transactions(user_id):
 @jwt_required
 def show_one_transaction(user_id, transaction_id):
     transaction_list = list(container.query_items(
-        f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}' AND r.id='{transaction_id}'",
+        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.id='{transaction_id}'",
         enable_cross_partition_query=True,
     ))
     for transaction in transaction_list:
         if transaction is not None:
             transaction['id'] = str(transaction['id'])
             for note in transaction['notes']:
-                note['id'] = str(note['id'])
+                note['_id'] = str(note['_id'])
             return make_response( jsonify( [transaction] ), 200 )
         else:
             return make_response( jsonify( { "error" : "Invalid transaction ID" } ), 404 )
@@ -150,7 +150,7 @@ def edit_transaction(user_id, transaction_id):
 @app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods=["DELETE"])
 def delete_transaction(user_id, transaction_id):
     transaction_list = list(container.query_items(
-        f"SELECT * FROM {container.id} r WHERE r.userID='{user_id}' AND r.id='{transaction_id}'",
+        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.id='{transaction_id}'",
         enable_cross_partition_query=True,
     ))
     if len(transaction_list) >= 1:
@@ -158,7 +158,86 @@ def delete_transaction(user_id, transaction_id):
         return make_response( jsonify( {} ), 204 )
     else:
         return make_response( jsonify( { "error" : "Invalid transaction ID" } ), 404 )
+    
 
+# ADD a new note
+@app.route("/api/transactions/<string:transaction_id>/notes", methods=["POST"])
+@jwt_required
+def add_new_note(user_id, transaction_id):
+    transaction = container.read_item(item=transaction_id, partition_key=user_id)
+    if transaction:
+        note_id = str(uuid.uuid1())
+        new_note = { 
+            "_id": note_id,
+            "note" : request.form["note"],
+        }
+        transaction['notes'].append(new_note)
+        container.upsert_item(body=transaction)
+        new_note_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/notes/{}".format(transaction_id, note_id)
+        return make_response( jsonify( { "url" : new_note_link } ), 201 )
+    else:
+        return make_response(jsonify({"error": "Invalid transaction ID"}), 404)
+    
+
+# GET all notes for a single transaction
+@app.route("/api/transactions/<string:transaction_id>/notes", methods=["GET"])
+@jwt_required
+def fetch_all_notes(user_id, transaction_id):
+    transaction = container.read_item(item=transaction_id, partition_key=user_id)
+    if transaction:
+        notes = transaction.get('notes', [])
+        data_to_return = []
+        for note in notes:
+            data_to_return.append(note)
+        return make_response( jsonify( data_to_return ), 200 )
+    else:
+        return make_response(jsonify({"error": "Invalid transaction ID"}), 404)
+    
+
+# GET a specific single note from a transaction
+@app.route("/api/transactions/<string:transaction_id>/notes/<string:note_id>", methods=["GET"])
+@jwt_required
+def fetch_one_note(user_id, transaction_id, note_id):
+    notes_list = list(container.query_items(
+        f"SELECT VALUE n FROM {container.id} t JOIN n IN t.notes WHERE t.id='{transaction_id}' AND t.userID='{user_id}' AND n._id='{note_id}'", 
+        enable_cross_partition_query=True))
+    if notes_list is None:
+         return make_response(jsonify({"error": "Invalid Note ID"}), 404)
+    return jsonify(notes_list[0]), 200
+
+
+# EDIT a note
+@app.route("/api/transactions/<string:transaction_id>/notes/<string:note_id>", methods=["PUT"])
+@jwt_required
+def edit_note(user_id, transaction_id, note_id):
+    edited_note = request.form["note"]
+    item = container.read_item(item=transaction_id, partition_key=user_id)
+    for note in item["notes"]:
+        if note["_id"] == note_id:
+            note["note"] = edited_note
+            container.upsert_item(body=item)
+    edited_note_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/notes/{}".format(transaction_id, note_id)
+    return make_response( jsonify( { "url" : edited_note_link } ), 200 )
+    
+
+# DELETE a note
+@app.route("/api/transactions/<string:transaction_id>/notes/<string:note_id>", methods=["DELETE"])
+@jwt_required
+def delete_note(user_id, transaction_id, note_id):
+    item = container.read_item(item=transaction_id, partition_key=user_id)
+    new_notes_list = []
+    deleted_count = 0
+    for note in item["notes"]:
+        if note["_id"] == note_id:
+            deleted_count += 1
+        else:
+            new_notes_list.append(note)
+    if deleted_count > 0:
+        item["notes"] = new_notes_list
+        container.upsert_item(body=item)
+        return make_response( jsonify( {} ), 204 )
+    else:
+        return make_response( jsonify( { "error" : "Invalid Note ID" } ), 404 )
 
 
 if __name__ == "__main__":
