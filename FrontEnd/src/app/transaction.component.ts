@@ -21,6 +21,13 @@ export class TransactionComponent {
         ) => this.webService.getTransaction(
         response.tokens?.accessToken.toString() as string, transaction_id)
         ).catch((error) => console.log(error));
+
+
+    console.log(transaction_id)
+      fetchAuthSession().then((response
+        ) => this.webService.getNotes(
+        response.tokens?.accessToken.toString() as string, transaction_id)
+        ).catch((error) => console.log(error));
     }
 
 }

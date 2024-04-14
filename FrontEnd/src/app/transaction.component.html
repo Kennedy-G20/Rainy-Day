@@ -21,3 +21,20 @@
       </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card bg-light mb-3" 
+                style = "width: 50rem; margin: auto"
+                *ngFor = "let note of webService.notes_list">
+                <div class="card-header">
+                    Notes
+                </div>
+                <div class="card-body">
+                    {{ note.note }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
