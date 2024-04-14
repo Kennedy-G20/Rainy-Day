@@ -102,7 +102,8 @@ def show_one_transaction(user_id, transaction_id):
 
 
 # ADD a transaction
-@app.route("/api/transactions/<string:user_id>", methods=["POST"])
+@app.route("/api/transactions", methods=["POST"])
+@jwt_required
 def add_transaction(user_id):
     if "description" in request.form and "transaction_direction" in request.form and "amount" in request.form and "category" in request.form and "date" in request.form:
         id = str(uuid.uuid1())
@@ -125,7 +126,8 @@ def add_transaction(user_id):
     
 
 # EDIT transaction
-@app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods=["PUT"])
+@app.route("/api/transactions/<string:transaction_id>", methods=["PUT"])
+@jwt_required
 def edit_transaction(user_id, transaction_id):
     if "description" in request.form and "transaction_direction" in request.form and "amount" in request.form and "category" in request.form and "date" in request.form:
         description = request.form["description"]
@@ -147,7 +149,8 @@ def edit_transaction(user_id, transaction_id):
     
 
 # DELETE transaction
-@app.route("/api/transactions/<string:user_id>/<string:transaction_id>", methods=["DELETE"])
+@app.route("/api/transactions/<string:transaction_id>", methods=["DELETE"])
+@jwt_required
 def delete_transaction(user_id, transaction_id):
     transaction_list = list(container.query_items(
         f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.id='{transaction_id}'",
