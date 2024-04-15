@@ -12,6 +12,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class TransactionComponent {
 
+    showTransaction: boolean = true;
+    showTransactionForm: boolean = false;
+    editDiscardText: String = "Edit";
+
+    transactionForm: any;
+
     noteForm: any;
 
     constructor(public webService: WebService,
@@ -19,6 +25,14 @@ export class TransactionComponent {
         private formBuilder: FormBuilder) { }
 
     ngOnInit(): void {
+        this.transactionForm = this.formBuilder.group({
+            description: ['', Validators.required],
+            transaction_direction: ['', Validators.required],
+            amount: ['', Validators.required],
+            category: ['', Validators.required],
+            date: ['', Validators.required]
+          });
+
         this.noteForm = this.formBuilder.group( {
         note: ['', Validators.required]
         });
@@ -36,7 +50,7 @@ export class TransactionComponent {
             ).catch((error) => console.log(error));
         }
 
-    onSubmit() {
+    onNoteSubmit() {
         const noteValue = this.noteForm.value.note.toString();
 
         fetchAuthSession().then((response
@@ -45,6 +59,19 @@ export class TransactionComponent {
             ).catch((error) => console.log(error));
         this.noteForm.reset();
     }
+
+    onEditTransactionSubmit() {
+        const transaction_id = this.route.snapshot.params['transaction_id'];
+        const editedTransaction = this.transactionForm.value;
+
+        fetchAuthSession().then((response
+            ) => this.webService.putTransaction(
+            response.tokens?.accessToken.toString() as string,transaction_id, editedTransaction)
+            ).catch((error) => console.log(error));
+
+        this.transactionForm.reset();
+        this.toggleTransactionEditForm();
+}
 
     isInvalid(control: any) {
         return this.noteForm.controls[control].invalid &&
@@ -60,5 +87,16 @@ export class TransactionComponent {
         this.isUnTouched();
     }
 
+    toggleTransactionEditForm() {
+
+        this.showTransactionForm = !this.showTransactionForm;
+        this.showTransaction = !this.showTransaction;
+
+        if (!this.showTransaction) {
+            this.editDiscardText = "Discard";
+        } else {
+            this.editDiscardText = "Edit";
+        }
+    }
 
 }
