@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NavComponent } from './nav.component';
 
 Amplify.configure(awsconfig);
 
@@ -32,7 +33,8 @@ var routes: any = [
 
 @NgModule({
   declarations: [
-    AppComponent, TransactionsComponent, TransactionComponent, HomeComponent
+    AppComponent, TransactionsComponent, TransactionComponent, HomeComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
