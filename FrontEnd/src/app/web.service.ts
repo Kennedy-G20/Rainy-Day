@@ -7,11 +7,10 @@ export class WebService {
     private transactionID: any;
 
     constructor(private http: HttpClient) { }
-
       
     transactions_list: any;
-    notes_list: any;
-        
+    oldTransactionForm: any;
+    notes_list: any;   
 
     getTransactions(accessToken: string, page: number) {
       const url = 'http://127.0.0.1:5000/api/transactions?pn=' + page;
@@ -34,6 +33,7 @@ export class WebService {
       });
   }
 
+
     postTransaction(accessToken: string, transactionData: any, page: number) {
       const url = 'http://127.0.0.1:5000/api/transactions';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
@@ -45,6 +45,33 @@ export class WebService {
       ).subscribe((response: any) => {
         this.getTransactions(accessToken, page)
       });
+  }
+
+
+    putTransaction(accessToken: string, id: any, editedTransaction: any){
+    const updatedTransaction: any = {}
+    this.oldTransactionForm = this.transactions_list.find((transaction: { id: any; }) => transaction.id === id);
+    for (const key in editedTransaction) {
+        const editedValue = editedTransaction[key];
+        const oldValue = this.oldTransactionForm[key];
+        if (editedValue === '' || editedValue === undefined) {
+          updatedTransaction[key] = oldValue;
+      } else if (editedValue !== oldValue) {
+          updatedTransaction[key] = editedValue;
+      } else {
+          updatedTransaction[key] = oldValue;
+      }
+    }
+    const url = 'http://127.0.0.1:5000/api/transactions/' + id;
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+    let postData = new FormData();
+    Object.keys(updatedTransaction).forEach(key => {
+      postData.append(key, updatedTransaction[key]);
+    });
+    return this.http.put<any>(url, postData, { headers }
+    ).subscribe((response: any) => {
+      this.getTransaction(accessToken, id)
+    });
   }
 
 
