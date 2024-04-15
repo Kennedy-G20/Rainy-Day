@@ -34,6 +34,19 @@ export class WebService {
       });
   }
 
+    postTransaction(accessToken: string, transactionData: any, page: number) {
+      const url = 'http://127.0.0.1:5000/api/transactions';
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      let postData = new FormData();
+      Object.keys(transactionData).forEach(key => {
+        postData.append(key, transactionData[key]);
+      });
+      return this.http.post<any>(url, postData, { headers }
+      ).subscribe((response: any) => {
+        this.getTransactions(accessToken, page)
+      });
+  }
+
 
     getNotes(accessToken: string, id: any) {
       const url = 'http://127.0.0.1:5000/api/transactions/' + id + '/notes';

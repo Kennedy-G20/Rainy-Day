@@ -12,11 +12,11 @@
 }
 
 .btn-sign-out {
-    background-color: rgb(12, 120, 93); /* Lighter shade of green */
+    background-color: rgb(12, 120, 93);
     color: white;
     border: 1px solid white;
 }
 
 .btn-sign-out:hover {
-    background-color: rgb(62, 172, 143); /* Darker shade of green on hover */
+    background-color: rgb(62, 172, 143);
 }
