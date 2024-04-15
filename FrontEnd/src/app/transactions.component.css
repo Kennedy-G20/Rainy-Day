@@ -1,3 +1,8 @@
 .card {
     background-color: rgb(12, 120, 93);
   }
+
+.transaction-form-button {
+  background-color: rgb(12, 120, 93);
+  color: white;
+}
