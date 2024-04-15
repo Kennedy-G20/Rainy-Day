@@ -10,3 +10,13 @@
 .nav-link {
     color: rgba(255, 255, 255, 0.8);
 }
+
+.btn-sign-out {
+    background-color: rgb(12, 120, 93); /* Lighter shade of green */
+    color: white;
+    border: 1px solid white;
+}
+
+.btn-sign-out:hover {
+    background-color: rgb(62, 172, 143); /* Darker shade of green on hover */
+}
