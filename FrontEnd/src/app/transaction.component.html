@@ -28,13 +28,36 @@
             <div class="card bg-light mb-3" 
                 style = "width: 50rem; margin: auto"
                 *ngFor = "let note of webService.notes_list">
-                <div class="card-header">
+                <!-- <div class="card-header">
                     Notes
-                </div>
+                </div> -->
                 <div class="card-body">
                     {{ note.note }}
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- <h2>Add note</h2> -->
+            <form [formGroup] = "noteForm" (ngSubmit)="onSubmit()">
+                <div class="from-group">
+                    <label for="note">Add note</label>
+                    <textarea name="note" id="note" rows="3" 
+                        class="form-control" formControlName="note"
+                        [ngClass]="{ 'error' : isInvalid('note') }"></textarea>
+                </div>
+
+                <span *ngIf="isIncomplete()">
+                    You have an incomplete note
+                </span>
+                
+                <button *ngIf="!isIncomplete()"
+                    type="submit"
+                    class="btn.btn-primary">Submit</button>
+            </form>
         </div>
     </div>
 </div>
