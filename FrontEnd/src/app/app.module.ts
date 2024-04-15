@@ -11,6 +11,7 @@ import { WebService } from './web.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 Amplify.configure(awsconfig);
 
@@ -35,7 +36,7 @@ var routes: any = [
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    RouterModule.forRoot(routes), AmplifyAuthenticatorModule
+    RouterModule.forRoot(routes), AmplifyAuthenticatorModule, ReactiveFormsModule
   ],
   providers: [WebService],
   bootstrap: [AppComponent]
