@@ -10,4 +10,5 @@
             <a routerLink="/transactions" class="nav-link">Transactions</a>
         </li>
     </ul>
+    <button *ngIf="signOut" (click)="signOut()" class="btn btn-sign-out ml-auto">Sign Out</button>
 </div>
