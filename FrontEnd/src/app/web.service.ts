@@ -75,6 +75,18 @@ export class WebService {
   }
 
 
+  deleteTransaction(accessToken: string, id: any) {
+    this.transactionID = id;
+
+    const url = 'http://127.0.0.1:5000/api/transactions/' + id;
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+    return this.http.delete<any>(url, { headers }
+    ).subscribe((response: any) => {
+        this.transactions_list = response
+    });
+}
+
+
     getNotes(accessToken: string, id: any) {
       const url = 'http://127.0.0.1:5000/api/transactions/' + id + '/notes';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
@@ -111,15 +123,20 @@ export class WebService {
   }
 
 
-    deleteTransaction(accessToken: string, id: any) {
-    this.transactionID = id;
+    deleteNote(accessToken: string, noteId: any) {
+      const updated_notes: any = [];
+      for (let i = 0; i < this.notes_list.length; i++) {
+          if (this.notes_list[i]._id !== noteId) {
+              updated_notes.push(this.notes_list[i]);
+          }
+      }
 
-    const url = 'http://127.0.0.1:5000/api/transactions/' + id;
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
-    return this.http.delete<any>(url, { headers }
-    ).subscribe((response: any) => {
-        this.transactions_list = response
-    });
+      const url = 'http://127.0.0.1:5000/api/transactions/' + this.transactionID + '/notes/' + noteId;
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      return this.http.delete<any>(url, { headers }
+      ).subscribe((response: any) => {
+          this.notes_list = updated_notes;
+      });
 }
 
 

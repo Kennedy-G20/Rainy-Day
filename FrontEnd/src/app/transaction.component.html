@@ -72,6 +72,9 @@
                 *ngFor = "let note of webService.notes_list">
                 <div *ngIf="!note.editMode" class="card-body">
                     {{ note.note }}
+                    <button class="btn btn-sm float-end" (click)="onDeleteNote(note)">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
                     <button class="btn btn-sm float-end" (click)="toggleEditNote(note)">
                         <i class="bi bi-pencil-fill"></i>
                     </button>

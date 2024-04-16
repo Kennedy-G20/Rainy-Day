@@ -120,6 +120,18 @@ export class TransactionComponent {
         this.toggleEditNote(note);
     }
 
+
+    onDeleteNote(note: any) {
+        const noteId = note._id;
+        console.log(noteId)
+
+        fetchAuthSession().then((response
+            ) => this.webService.deleteNote(
+            response.tokens?.accessToken.toString() as string, noteId)
+            ).catch((error) => console.log(error));
+    }
+
+
     isInvalid(control: any) {
         return this.noteForm.controls[control].invalid &&
                 this.noteForm.controls[control].touched;
