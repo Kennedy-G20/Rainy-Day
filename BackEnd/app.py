@@ -89,6 +89,44 @@ def show_all_user_transactions(user_id):
     
     return make_response( jsonify( user_trasactions ), 200 )
 
+# GET all of a users transaction categories
+@app.route("/api/transactions/categories/", methods = ["GET"])
+@jwt_required
+def show_all_user_catrgories(user_id):
+    user_categories = list(container.query_items(
+        f"SELECT DISTINCT t.category FROM {container.id} t WHERE t.userID='{user_id}'",
+        enable_cross_partition_query=True,
+    ))
+
+    category_names = [category['category'] for category in user_categories]
+
+    if len(user_categories) == 0:
+        raise exceptions.CosmosResourceExistsError(user_id) #add own exception for this
+    
+    return make_response( jsonify( category_names ), 200 )
+
+
+# GET all transactions of a single user - from a category
+@app.route("/api/transactions/categories/<string:category_name>", methods = ["GET"])
+@jwt_required
+def show_all_user_transactions_in_category(user_id, category_name):
+    page_num, page_size = 1, 10
+    if request.args.get('pn'):
+        page_num = int(request.args.get('pn'))
+    if request.args.get('ps'):
+        page_size = int(request.args.get('ps'))
+    page_start = (page_size * (page_num - 1))
+
+    user_trasactions = list(container.query_items(
+        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.category='{category_name}' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
+        enable_cross_partition_query=True,
+    ))
+
+    if len(user_trasactions) == 0:
+        raise exceptions.CosmosResourceExistsError(user_id) #add own exception for this
+    
+    return make_response( jsonify( user_trasactions ), 200 )
+
 
 # GET one transaction
 @app.route("/api/transactions/<string:transaction_id>", methods = ["GET"])
