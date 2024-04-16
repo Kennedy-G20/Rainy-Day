@@ -15,10 +15,10 @@ export class TransactionComponent {
     showTransaction: boolean = true;
     showTransactionForm: boolean = false;
     editDiscardText: String = "Edit";
-
     transactionForm: any;
-
     noteForm: any;
+    noteEditForm: any;
+    showNoteEdit: boolean = false;
 
     constructor(public webService: WebService,
         private route: ActivatedRoute,
@@ -36,6 +36,11 @@ export class TransactionComponent {
         this.noteForm = this.formBuilder.group( {
         note: ['', Validators.required]
         });
+
+
+        this.noteEditForm = this.formBuilder.group( {
+            note: ['', Validators.required]
+            });
 
         const transaction_id = this.route.snapshot.params['transaction_id'];
 
@@ -78,6 +83,18 @@ export class TransactionComponent {
                 this.noteForm.controls[control].touched;
     }
 
+    onEditNoteSubmit(note: any) {
+        const noteValue = this.noteEditForm.value.note.toString();
+        const noteId = note._id;
+
+        fetchAuthSession().then((response
+            ) => this.webService.putNote(
+            response.tokens?.accessToken.toString() as string, noteId, noteValue)
+            ).catch((error) => console.log(error));
+        this.noteForm.reset();
+        this.toggleEditNote(note);
+    }
+
     isUnTouched() {
         return this.noteForm.controls.note.pristine;
     }
@@ -97,6 +114,10 @@ export class TransactionComponent {
         } else {
             this.editDiscardText = "Edit";
         }
+    }
+
+    toggleEditNote(note: any) {
+        note.showNoteEdit = !note.showNoteEdit;
     }
 
 }

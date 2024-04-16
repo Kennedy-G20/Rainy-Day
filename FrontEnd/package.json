@@ -21,6 +21,7 @@
     "@aws-amplify/ui-angular": "^5.0.13",
     "aws-amplify": "^6.0.28",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "jquery": "^3.7.1",
     "jsonwebtoken": "^9.0.2",
     "jwt-encode": "^1.0.1",

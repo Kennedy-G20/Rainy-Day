@@ -96,5 +96,16 @@ export class WebService {
         this.getNotes(accessToken, this.transactionID);
       });
   }
-  
+
+    putNote(accessToken: string, noteId: any, note: string){
+      let postData = new FormData();
+      postData.append("note", note);
+
+      const url = 'http://127.0.0.1:5000/api/transactions/' + this.transactionID + '/notes/' + noteId;
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      return this.http.put<any>(url, postData, { headers }
+      ).subscribe((response: any) => {
+        this.getNotes(accessToken, this.transactionID);
+      });
+  }
 }
