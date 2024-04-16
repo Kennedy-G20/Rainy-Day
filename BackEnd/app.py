@@ -80,7 +80,7 @@ def show_all_user_transactions(user_id):
     page_start = (page_size * (page_num - 1))
 
     user_trasactions = list(container.query_items(
-        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' OFFSET {page_start} LIMIT {page_size}",
+        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
         enable_cross_partition_query=True,
     ))
 
