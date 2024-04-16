@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { WebService } from './web.service';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -20,9 +21,12 @@ export class TransactionComponent {
     noteEditForm: any;
     showNoteEdit: boolean = false;
 
+    page: number = 1;
+
     constructor(public webService: WebService,
         private route: ActivatedRoute,
-        private formBuilder: FormBuilder) { }
+        private formBuilder: FormBuilder,
+        private router: Router) { }
 
     ngOnInit(): void {
         this.transactionForm = this.formBuilder.group({
@@ -76,11 +80,32 @@ export class TransactionComponent {
 
         this.transactionForm.reset();
         this.toggleTransactionEditForm();
-}
+    }
 
-    isInvalid(control: any) {
-        return this.noteForm.controls[control].invalid &&
-                this.noteForm.controls[control].touched;
+    onDeleteButton() {
+        const confirmDelete = window.confirm("Are you sure you want to delete this transaction?");
+        if (confirmDelete) {
+            this.onDeleteTransaction();
+        }
+    }
+
+    onDeleteTransaction() {
+        const transaction_id = this.route.snapshot.params['transaction_id'];
+
+        fetchAuthSession().then((response
+            ) => this.webService.deleteTransaction(
+            response.tokens?.accessToken.toString() as string, transaction_id)
+            ).catch((error) => console.log(error));
+        this.router.navigate(['/transactions']);
+
+        if (sessionStorage['page']) {
+            this.page = Number(sessionStorage['page'])
+          }
+
+        fetchAuthSession().then((response
+          ) => this.webService.getTransactions(
+          response.tokens?.accessToken.toString() as string, this.page)
+          ).catch((error) => console.log(error));
     }
 
     onEditNoteSubmit(note: any) {
@@ -93,6 +118,11 @@ export class TransactionComponent {
             ).catch((error) => console.log(error));
         this.noteForm.reset();
         this.toggleEditNote(note);
+    }
+
+    isInvalid(control: any) {
+        return this.noteForm.controls[control].invalid &&
+                this.noteForm.controls[control].touched;
     }
 
     isUnTouched() {

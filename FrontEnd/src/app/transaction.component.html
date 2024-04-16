@@ -56,7 +56,10 @@
             </form>
         </div>
         <div class="col-md-1">
-            <button class="btn" style="margin-bottom: 20px;" (click)="toggleTransactionEditForm()">{{ editDiscardText }}</button>
+            <div class="col-md-1 d-flex align-items-end">
+                <button class="btn" style="margin-bottom: 20px; margin-right: 10px;" (click)="toggleTransactionEditForm()">{{ editDiscardText }}</button>
+                <button class="btn btn-danger" style="margin-bottom: 20px;" (click)="onDeleteButton()">Delete</button>
+            </div>
         </div>
     </div>
 </div>
