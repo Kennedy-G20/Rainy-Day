@@ -67,11 +67,19 @@
             <div class="card bg-light mb-3" 
                 style = "width: 50rem; margin: auto"
                 *ngFor = "let note of webService.notes_list">
-                <!-- <div class="card-header">
-                    Notes
-                </div> -->
-                <div class="card-body">
+                <div *ngIf="!note.editMode" class="card-body">
                     {{ note.note }}
+                    <button class="btn btn-sm float-end" (click)="toggleEditNote(note)">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                </div>
+                <div *ngIf="note.showNoteEdit" class="card-body">
+                    <form [formGroup]="noteEditForm" (ngSubmit)="onEditNoteSubmit(note)">
+                        <label for="note">Update note:</label>
+                        <input type="text" class="form-control mb-3" id="note" placeholder="{{ note.note }}" formControlName="note">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary ms-2" (click)="toggleEditNote(note)">Cancel</button>
+                    </form>
                 </div>
             </div>
         </div>
