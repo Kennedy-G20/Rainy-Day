@@ -97,6 +97,7 @@ export class WebService {
       });
   }
 
+
     putNote(accessToken: string, noteId: any, note: string){
       let postData = new FormData();
       postData.append("note", note);
@@ -108,4 +109,18 @@ export class WebService {
         this.getNotes(accessToken, this.transactionID);
       });
   }
+
+
+    deleteTransaction(accessToken: string, id: any) {
+    this.transactionID = id;
+
+    const url = 'http://127.0.0.1:5000/api/transactions/' + id;
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+    return this.http.delete<any>(url, { headers }
+    ).subscribe((response: any) => {
+        this.transactions_list = response
+    });
+}
+
+
 }

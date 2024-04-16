@@ -30,11 +30,16 @@ export class TransactionsComponent {
       if (sessionStorage['page']) {
         this.page = Number(sessionStorage['page'])
       }
+
+      this.getTransactionsList(this.page);
+    }
+  
+    getTransactionsList(page: number){
       fetchAuthSession().then((response
         ) => this.webService.getTransactions(
-        response.tokens?.accessToken.toString() as string, this.page)
+        response.tokens?.accessToken.toString() as string, page)
         ).catch((error) => console.log(error));
-    }
+  }
 
     previousPage() {
       if (this.page > 1) {
