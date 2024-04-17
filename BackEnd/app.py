@@ -90,9 +90,9 @@ def show_all_user_transactions(user_id):
     return make_response( jsonify( user_trasactions ), 200 )
 
 # GET all of a users transaction categories
-@app.route("/api/transactions/categories/", methods = ["GET"])
+@app.route("/api/categories", methods = ["GET"])
 @jwt_required
-def show_all_user_catrgories(user_id):
+def show_all_user_categories(user_id):
     user_categories = list(container.query_items(
         f"SELECT DISTINCT t.category FROM {container.id} t WHERE t.userID='{user_id}'",
         enable_cross_partition_query=True,
@@ -107,7 +107,7 @@ def show_all_user_catrgories(user_id):
 
 
 # GET all transactions of a single user - from a category
-@app.route("/api/transactions/categories/<string:category_name>", methods = ["GET"])
+@app.route("/api/categories/<string:category_name>", methods = ["GET"])
 @jwt_required
 def show_all_user_transactions_in_category(user_id, category_name):
     page_num, page_size = 1, 10
