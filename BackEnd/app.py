@@ -206,7 +206,22 @@ def delete_transaction(user_id, transaction_id):
         return make_response( jsonify( {} ), 204 )
     else:
         return make_response( jsonify( { "error" : "Invalid transaction ID" } ), 404 )
-    
+
+
+# Search transactions
+@app.route("/api/search", methods=["GET"])
+@jwt_required
+def search_transactions(user_id):
+    query = request.args.get('q').lower()
+    if query:
+        search_results = list(container.query_items(
+            f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND CONTAINS(LOWER(t.description), '{query}')",
+            enable_cross_partition_query=True,
+        ))
+        return make_response(jsonify(search_results), 200)
+    else:
+        return make_response(jsonify({"error": "Nothing matches this search"}), 400) 
+
 
 # ADD a new note
 @app.route("/api/transactions/<string:transaction_id>/notes", methods=["POST"])
