@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { CategoriesComponent } from './categories.component';
+import { CategoryComponent } from './category.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav.component';
 
@@ -33,13 +34,17 @@ var routes: any = [
   {
     path: 'categories',
     component: CategoriesComponent
+  },
+  {
+    path: 'categories/:category_name',
+    component: CategoryComponent
   }
 ];
 
 @NgModule({
   declarations: [
     AppComponent, TransactionsComponent, TransactionComponent, HomeComponent,
-    NavComponent, CategoriesComponent
+    NavComponent, CategoriesComponent, CategoryComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

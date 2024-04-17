@@ -8,4 +8,10 @@ import { Component, Input } from '@angular/core';
 
 export class NavComponent {
     @Input() signOut?: () => void;
+
+    openDropdown: boolean = false;
+
+    toggleDropdown() {
+        this.openDropdown = !this.openDropdown;
+    }
 }
