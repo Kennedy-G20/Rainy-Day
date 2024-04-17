@@ -11,6 +11,7 @@ import { WebService } from './web.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
+import { CategoriesComponent } from './categories.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav.component';
 
@@ -28,13 +29,17 @@ var routes: any = [
   {
     path: 'transactions/:transaction_id',
     component: TransactionComponent
+  },
+  {
+    path: 'categories',
+    component: CategoriesComponent
   }
 ];
 
 @NgModule({
   declarations: [
     AppComponent, TransactionsComponent, TransactionComponent, HomeComponent,
-    NavComponent
+    NavComponent, CategoriesComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

@@ -11,6 +11,7 @@ export class WebService {
     transactions_list: any;
     oldTransactionForm: any;
     notes_list: any;   
+    categories_list: any;
 
     getTransactions(accessToken: string, page: number) {
       const url = 'http://127.0.0.1:5000/api/transactions?pn=' + page;
@@ -137,6 +138,15 @@ export class WebService {
       ).subscribe((response: any) => {
           this.notes_list = updated_notes;
       });
+}
+
+  getCategories(accessToken: string) {
+    const url = 'http://127.0.0.1:5000/api/categories';
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+    return this.http.get<any>(url, { headers }
+    ).subscribe((response: any) => {
+      this.categories_list = response
+    });
 }
 
 
