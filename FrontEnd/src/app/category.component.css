@@ -1,3 +1,15 @@
 .card {
     background-color: rgb(12, 120, 93);
+    color: white;
   }
+
+.card-header {
+    background-color: white;
+    color: rgb(12, 120, 93) !important;
+    border: 1px solid rgb(12, 120, 93);
+}
+
+h1 {
+    color: rgb(12, 120, 93) !important;
+    text-align: center;
+}

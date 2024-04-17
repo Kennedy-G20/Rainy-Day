@@ -13,6 +13,7 @@ export class WebService {
     notes_list: any;   
     categories_list: any;
     category_transactions_list: any;
+    balance_list: any;
 
     getTransactions(accessToken: string, page: number) {
       const url = 'http://127.0.0.1:5000/api/transactions?pn=' + page;
@@ -157,7 +158,31 @@ export class WebService {
     return this.http.get<any>(url, { headers }
     ).subscribe((response: any) => {
         this.category_transactions_list = response
+        this.balance_list = this.calculateCategoryBalance();
+        console.log(this.balance_list)
     });
+  }
+
+  calculateCategoryBalance(): any {
+    let totalIncome = 0;
+    let totalOutcome = 0;
+
+    for (const transaction of this.category_transactions_list) {
+      if (transaction.transaction_direction === 'income') {
+        totalIncome += parseFloat(transaction.amount);
+      } else if (transaction.transaction_direction === 'outcome') {
+        totalOutcome += parseFloat(transaction.amount);
+      }
+    }
+
+    const balance = totalIncome - totalOutcome;
+  
+    const spendings_list = {
+      'total_income': totalIncome,
+      'total_outcome': totalOutcome,
+      'balance': balance
+    };  
+    return spendings_list;
   }
 
 

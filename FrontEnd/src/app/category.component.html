@@ -1,5 +1,9 @@
 <div class="container" style="margin-top: 70px;">
 
+    <div>
+        <h1> {{ this.current_category }}</h1>
+    </div>
+
     <div *ngFor = "let transaction of webService.category_transactions_list">
         <div class="card text-white mb-3" style = "width: 50rem; margin: auto; cursor: pointer;" 
         [routerLink] = "['/transactions', transaction.id]">
@@ -22,5 +26,40 @@
           </div>
         </div>
       </div>
+      <div class="row" *ngIf="webService.balance_list">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+                Total Income
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{ webService.balance_list.total_income | currency:'USD':'symbol':'1.2-2' }}</p>
+              </div>
+          </div>
+        </div>
+      
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+                Total Outcome
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{ webService.balance_list.total_outcome | currency:'USD':'symbol':'1.2-2' }}</p>
+              </div>
+          </div>
+        </div>
+      
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+                BALANCE
+              </div>
+              <div class="card-body">
+                <p class="card-text">£{{ webService.balance_list.balance }}</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    
 
 </div>
