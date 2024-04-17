@@ -12,17 +12,19 @@ export class CategoryComponent {
     
     constructor(public webService: WebService,
                 private route: ActivatedRoute,) { }
+      
+    current_category: any;
 
     ngOnInit() {
-        const category_name = this.route.snapshot.params['category_name'];
-        this.getCategoriesList(category_name);
+        this.current_category= this.route.snapshot.params['category_name'];
+        this.getCategoriesList();
 
     }
 
-    getCategoriesList(category_name: any){
+    getCategoriesList(){
         fetchAuthSession().then((response
         ) => this.webService.getCategory(
-        response.tokens?.accessToken.toString() as string, category_name)
+        response.tokens?.accessToken.toString() as string, this.current_category)
         ).catch((error) => console.log(error));
     }
 
