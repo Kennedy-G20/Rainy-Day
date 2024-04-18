@@ -79,15 +79,28 @@ def show_all_user_transactions(user_id):
         page_size = int(request.args.get('ps'))
     page_start = (page_size * (page_num - 1))
 
-    user_trasactions = list(container.query_items(
-        f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
-        enable_cross_partition_query=True,
-    ))
+    transaction_direction = request.args.get('td')
+    if transaction_direction == "in":
+        user_transactions = list(container.query_items(
+            f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.transaction_direction='income' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
+            enable_cross_partition_query=True,
+        ))
+    elif transaction_direction == "out":
+        user_transactions = list(container.query_items(
+            f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.transaction_direction='outcome' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
+            enable_cross_partition_query=True,
+        ))
+    else:
+        user_transactions = list(container.query_items(
+            f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
+            enable_cross_partition_query=True,
+        ))
 
-    if len(user_trasactions) == 0:
+    if len(user_transactions) == 0:
         raise exceptions.CosmosResourceExistsError(user_id) #add own exception for this
     
-    return make_response( jsonify( user_trasactions ), 200 )
+    return make_response( jsonify( user_transactions ), 200 )
+
 
 # GET all of a users transaction categories
 @app.route("/api/categories", methods = ["GET"])
