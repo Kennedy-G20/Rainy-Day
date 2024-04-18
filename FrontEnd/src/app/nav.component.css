@@ -32,3 +32,8 @@
     color: rgb(12, 120, 93);
     border: 1px solid rgb(12, 120, 93);
 }
+
+.nav-title {
+    padding: 0.5rem;
+    font-weight: bold;
+}
