@@ -193,5 +193,6 @@ export class WebService {
       this.search_transactions_list = response
     });
   }
+  
 
 }
