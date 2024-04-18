@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { WebService } from './web.service';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'navigation',
@@ -7,6 +9,10 @@ import { Component, Input } from '@angular/core';
 })
 
 export class NavComponent {
+
+  constructor(public webService: WebService,
+              private router: Router) { }
+
     @Input() signOut?: () => void;
 
     openDropdown: boolean = false;
@@ -14,4 +20,16 @@ export class NavComponent {
     toggleDropdown() {
         this.openDropdown = !this.openDropdown;
     }
+
+    onSearch(search_value: string) {;
+      this.resetSearch();
+      sessionStorage['search_value'] = search_value;
+      this.router.navigate(['/search', search_value]);
+    }
+
+    resetSearch() {
+      sessionStorage.removeItem('search_value');
+      window.location.reload();
+    }
+
 }

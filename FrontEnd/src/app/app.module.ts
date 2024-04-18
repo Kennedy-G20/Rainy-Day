@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { CategoriesComponent } from './categories.component';
 import { CategoryComponent } from './category.component';
+import { SearchResultComponent } from './search-result.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav.component';
 
@@ -38,13 +39,17 @@ var routes: any = [
   {
     path: 'categories/:category_name',
     component: CategoryComponent
+  },
+  {
+    path: 'search/:search_value',
+    component: SearchResultComponent
   }
 ];
 
 @NgModule({
   declarations: [
     AppComponent, TransactionsComponent, TransactionComponent, HomeComponent,
-    NavComponent, CategoriesComponent, CategoryComponent
+    NavComponent, CategoriesComponent, CategoryComponent, SearchResultComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

@@ -14,6 +14,7 @@ export class WebService {
     categories_list: any;
     category_transactions_list: any;
     balance_list: any;
+    search_transactions_list: any;
 
     getTransactions(accessToken: string, page: number) {
       const url = 'http://127.0.0.1:5000/api/transactions?pn=' + page;
@@ -159,7 +160,6 @@ export class WebService {
     ).subscribe((response: any) => {
         this.category_transactions_list = response
         this.balance_list = this.calculateCategoryBalance();
-        console.log(this.balance_list)
     });
   }
 
@@ -185,5 +185,13 @@ export class WebService {
     return spendings_list;
   }
 
+  getSearch(accessToken: string, search_value: any) {
+    const url = 'http://127.0.0.1:5000/api/search?q=' + search_value;
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+    return this.http.get<any>(url, { headers }
+    ).subscribe((response: any) => {
+      this.search_transactions_list = response
+    });
+  }
 
 }

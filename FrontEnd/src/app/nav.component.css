@@ -20,3 +20,15 @@
 .btn-sign-out:hover {
     background-color: rgb(62, 172, 143);
 }
+
+.search-btn{
+    background-color: white;
+    color: rgb(12, 120, 93);
+    border: 1px solid rgb(12, 120, 93);
+}
+
+.search-btn:hover{
+    background-color: rgb(168, 210, 200);
+    color: rgb(12, 120, 93);
+    border: 1px solid rgb(12, 120, 93);
+}

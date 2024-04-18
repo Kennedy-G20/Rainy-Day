@@ -2,6 +2,12 @@
     <span class="navbar-brand">
         Rainy Day
     </span>
+    <div class="mx-auto d-flex">
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" #search_value>
+        </form>
+        <button class="btn search-btn my-sm-0" type="button" (click)="onSearch(search_value.value)">Search</button>
+    </div>
     <ul class="navbar-nav">
         <li class="nav-item">
             <a routerLink="/" class="nav-link cursor: pointer;">Dashboard</a>
