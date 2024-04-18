@@ -1,5 +1,12 @@
 .card {
     background-color: rgb(12, 120, 93);
+    /* outline: rgb(12, 120, 93); */
+  }
+
+  .card-amount {
+    background-color: white;
+    padding: 2px;
+    border-radius: 5px;
   }
 
 .transaction-form-button {
