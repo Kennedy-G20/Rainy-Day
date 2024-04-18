@@ -11,8 +11,10 @@
 
 <div class="container" style="margin-top: 70px;">
 
-  <button class="btn transaction-form-button" style="margin-bottom: 20px;" (click)="openTransactionForm()">Add Transaction</button>
-  
+  <div class="text-center" style="margin-bottom: 20px; margin-left: 10px;">
+    <button class="btn transaction-form-button" style="margin-bottom: 20px;" (click)="openTransactionForm()">Add Transaction</button>
+  </div>
+
   <div *ngIf="showTransactionForm">
     <h2>Add Transaction</h2>
     <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" style="margin-bottom: 20px;">
@@ -44,6 +46,14 @@
       </div>
       <button type="submit" class="btn submit-btn" style="margin-top: 20px;">Submit</button>
     </form>
+  </div>
+
+  <div class="mb-3" style="text-align: center;">
+    <select class="form-select" style="width: 10rem; margin: auto;">
+      <option value="All">All</option>
+      <option value="In">In</option>
+      <option value="Out">Out</option>
+    </select>
   </div>
 
   <div *ngFor="let transaction of webService.transactions_list">
