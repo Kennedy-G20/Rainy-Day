@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class CategoryComponent {
     
     constructor(public webService: WebService,
-                private route: ActivatedRoute,) { }
+                private route: ActivatedRoute) { }
       
     current_category: any;
 
