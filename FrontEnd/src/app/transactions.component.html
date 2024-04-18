@@ -46,28 +46,28 @@
     </form>
   </div>
 
-    <div *ngFor = "let transaction of webService.transactions_list">
-      <div class="card text-white mb-3" style = "width: 50rem; margin: auto; cursor: pointer;" 
-      [routerLink] = "['/transactions', transaction.id]">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <div class="card-body">
-              {{transaction.description}}
-            </div>
+  <div *ngFor="let transaction of webService.transactions_list">
+    <div class="card text-white mb-3" style="width: 40rem; margin: auto; cursor: pointer;"
+        [routerLink] = "['/transactions', transaction.id]">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <span>{{ transaction.description }}</span>
           </div>
-          <div class="col-md-4">
-            <div class="card-body">
-              {{transaction.transaction_direction}}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card-body">
-              £{{transaction.amount}}
+          <div class="col text-end">
+            <div class="card-amount">
+              <ng-container *ngIf="transaction.transaction_direction === 'outcome'; else income">
+                <span class="text-danger">-£{{ transaction.amount }}</span>
+              </ng-container>
+              <ng-template #income>
+                <span class="text-success">+£{{ transaction.amount }}</span>
+              </ng-template>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
     <div class="row">
       <div class="col-sm-6">
