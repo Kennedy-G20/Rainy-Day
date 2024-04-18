@@ -1,10 +1,4 @@
 .card {
     background-color: rgb(12, 120, 93);
     color: white;
-}
-
-.card-amount {
-    background-color: white;
-    padding: 2px;
-    border-radius: 5px;
-}
+  }

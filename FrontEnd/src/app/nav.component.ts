@@ -24,6 +24,7 @@ export class NavComponent {
     onSearch(search_value: string) {;
       this.resetSearch();
       sessionStorage['search_value'] = search_value;
+      console.log(search_value)
       this.router.navigate(['/search', search_value]);
     }
 

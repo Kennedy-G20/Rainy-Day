@@ -2,25 +2,6 @@
     background-color: rgb(12, 120, 93);
   }
 
-.card-data{ 
-  background-color: white;
-  color: black;
-  padding: 2px;
-  border-radius: 3px;
-  }
-
-.big-card {
-    height: 15rem;
-}
-
-.big-text {
-    font-size: 1rem;
-}
-
-.row-size {
-  padding: 0.4rem;
-}
-
 .error { background-color: #fff0f0 ; }
 
 .btn{

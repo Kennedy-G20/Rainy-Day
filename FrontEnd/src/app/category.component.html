@@ -4,7 +4,7 @@
         <h1> {{ this.current_category }}</h1>
     </div>
 
-    <div *ngFor = "let transaction of webService.category_transactions_list">   
+    <div *ngFor = "let transaction of webService.category_transactions_list">
       <div class="card text-white mb-3" style="width: 40rem; margin: auto; cursor: pointer;"
             [routerLink] = "['/transactions', transaction.id]">
         <div class="card-body">
