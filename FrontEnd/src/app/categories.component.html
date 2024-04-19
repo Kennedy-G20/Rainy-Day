@@ -1,6 +1,10 @@
 
 <div class="container" style="margin-top: 70px;">
-  <h2>Categories</h2>
+
+  <div>
+    <h1> Your Categories </h1>
+</div>
+
   <div *ngFor = "let category of webService.categories_list">
     <div class="card text-white mb-3" style = "width: 50rem; margin: auto; cursor: pointer;"
       [routerLink] = "['/categories', category]">
