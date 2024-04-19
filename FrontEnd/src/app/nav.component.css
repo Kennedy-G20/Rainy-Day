@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #007ab3;
+    background-color: #236b8d;
 }
 
 .navbar-brand {
@@ -12,7 +12,7 @@
 }
 
 .btn-sign-out {
-    background-color: #007ab3;
+    background-color: #236b8d;
     color: white;
     border: 1px solid white;
 }
@@ -23,14 +23,14 @@
 
 .search-btn{
     background-color: white;
-    color: #007ab3;
+    color: #236b8d;
     border: 1px solid;
 }
 
 .search-btn:hover{
     background-color: #e6f7ff;
-    color: rgb#007ab3;
-    border: 1px solid #007ab3;
+    color: rgb#236b8d;
+    border: 1px solid #236b8d;
 }
 
 .nav-title {

@@ -1,12 +1,12 @@
 .card {
-    background-color:  #007ab3;
+    background-color:  #236b8d;
     color: white;
   }
 
 .card-header {
     background-color: white;
-    color:  #007ab3 !important;
-    border: 1px solid rgb #007ab3;
+    color:  #236b8d !important;
+    border: 1px solid rgb #236b8d;
 }
 
 .card-amount {
@@ -16,6 +16,6 @@
   }
 
 h1 {
-    color:  #007ab3 !important;
+    color:  #20526a !important;
     text-align: center;
 }

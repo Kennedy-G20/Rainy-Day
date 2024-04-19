@@ -1,5 +1,5 @@
 .card {
-    background-color: #007ab3;
+    background-color: #236b8d;
   }
 
 .card-data{ 
@@ -25,8 +25,8 @@
 
 .btn-green-outline {
     background-color: white;
-    color: #007ab3;
-    border: 1px solid #007ab3;
+    color: #236b8d;
+    border: 1px solid #236b8d;
 }
 
 .btn-green-outline :hover {
