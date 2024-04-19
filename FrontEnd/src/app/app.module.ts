@@ -14,7 +14,7 @@ import { HomeComponent } from './home.component';
 import { CategoriesComponent } from './categories.component';
 import { CategoryComponent } from './category.component';
 import { SearchResultComponent } from './search-result.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav.component';
 
 Amplify.configure(awsconfig);
@@ -53,7 +53,8 @@ var routes: any = [
   ],
   imports: [
     BrowserModule, HttpClientModule,
-    RouterModule.forRoot(routes), AmplifyAuthenticatorModule, ReactiveFormsModule
+    RouterModule.forRoot(routes), AmplifyAuthenticatorModule, ReactiveFormsModule,
+    FormsModule
   ],
   providers: [WebService],
   bootstrap: [AppComponent]

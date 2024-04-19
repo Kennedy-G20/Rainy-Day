@@ -104,7 +104,7 @@ export class TransactionComponent {
 
         fetchAuthSession().then((response
           ) => this.webService.getTransactions(
-          response.tokens?.accessToken.toString() as string, this.page)
+          response.tokens?.accessToken.toString() as string, "all", this.page)
           ).catch((error) => console.log(error));
     }
 

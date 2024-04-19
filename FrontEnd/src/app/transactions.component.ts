@@ -14,6 +14,7 @@ export class TransactionsComponent {
     showTransactionForm: boolean = false;
     transactionForm: any;
     page: number = 1;
+    transaction_direction: string = "all";
 
     constructor(public webService: WebService,
                 private formBuilder: FormBuilder) { }
@@ -31,13 +32,17 @@ export class TransactionsComponent {
         this.page = Number(sessionStorage['page'])
       }
 
-      this.getTransactionsList(this.page);
+      if (sessionStorage['transaction_direction']) {
+        this.transaction_direction = String(sessionStorage['transaction_direction'])
+      }
+
+      this.getTransactionsList(this.transaction_direction, this.page);
     }
   
-    getTransactionsList(page: number){
+    getTransactionsList(transaction_direction: string, page: number){
       fetchAuthSession().then((response
         ) => this.webService.getTransactions(
-        response.tokens?.accessToken.toString() as string, page)
+        response.tokens?.accessToken.toString() as string, transaction_direction, page)
         ).catch((error) => console.log(error));
   }
 
@@ -48,7 +53,7 @@ export class TransactionsComponent {
 
           fetchAuthSession().then((response
             ) => this.webService.getTransactions(
-            response.tokens?.accessToken.toString() as string, this.page)
+            response.tokens?.accessToken.toString() as string, this.transaction_direction, this.page)
             ).catch((error) => console.log(error));
       }
    }
@@ -59,7 +64,7 @@ export class TransactionsComponent {
 
       fetchAuthSession().then((response
         ) => this.webService.getTransactions(
-        response.tokens?.accessToken.toString() as string, this.page)
+        response.tokens?.accessToken.toString() as string, this.transaction_direction, this.page)
         ).catch((error) => console.log(error));
   }
 
@@ -77,4 +82,12 @@ export class TransactionsComponent {
         ).catch((error) => console.log(error));
     this.transactionForm.reset();
   }
+
+  onTransactionDirectionSelect(event: Event) {
+    const direction = (event.target as HTMLSelectElement).value;
+    this.transaction_direction = direction.toLowerCase();
+
+    this.getTransactionsList(this.transaction_direction, this.page);
+  }
+
 }
