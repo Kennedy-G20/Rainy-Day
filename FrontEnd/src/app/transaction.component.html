@@ -89,15 +89,22 @@
                 <label for="date">Date:</label>
                 <input type="date" class="form-control" id="date" formControlName="date"  placeholder="{{ transaction.date }}">
                 </div>
-                <button type="submit" class="btn" style="margin-top: 20px;">Submit</button>
+                <button type="submit" class="btn btn-green-outline" style="margin-top: 20px;">Submit</button>
             </form>
         </div>
-        <div class="col-md-1">
-            <div class="col-md-1 d-flex align-items-end">
-                <button class="btn" style="margin-bottom: 20px; margin-right: 10px;" (click)="toggleTransactionEditForm()">{{ editDiscardText }}</button>
-                <button class="btn btn-danger" style="margin-bottom: 20px;" (click)="onDeleteButton()">Delete</button>
+
+        <div class="row">
+            <div style="width: 10rem; margin: auto;">
+              <div class="row" style="margin-bottom: 20px;">
+                <div class="col-sm-6">
+                    <button class="btn btn-dark" style="margin-bottom: 20px; margin-right: 10px;" (click)="toggleTransactionEditForm()">{{ editDiscardText }}</button>
+                </div>
+                <div class="col-sm-6 text-end">
+                    <button class="btn btn-dark" style="margin-bottom: 20px;" (click)="onDeleteButton()">Delete</button>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
     </div>
 </div>
 
@@ -109,10 +116,10 @@
                 *ngFor = "let note of webService.notes_list">
                 <div *ngIf="!note.editMode" class="card-body">
                     {{ note.note }}
-                    <button class="btn btn-sm float-end" (click)="onDeleteNote(note)">
+                    <button class="btn btn-sm btn-green-outline float-end" (click)="onDeleteNote(note)">
                         <i class="bi bi-trash-fill"></i>
                     </button>
-                    <button class="btn btn-sm float-end" (click)="toggleEditNote(note)">
+                    <button class="btn btn-sm float-end btn-green-outline" (click)="toggleEditNote(note)">
                         <i class="bi bi-pencil-fill"></i>
                     </button>
                 </div>
@@ -129,25 +136,26 @@
     </div>
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <!-- <h2>Add note</h2> -->
-            <form [formGroup] = "noteForm" (ngSubmit)="onNoteSubmit()">
-                <div class="from-group">
-                    <label for="note">Add note</label>
-                    <textarea name="note" id="note" rows="3" 
-                        class="form-control" formControlName="note"
-                        [ngClass]="{ 'error' : isInvalid('note') }"></textarea>
-                </div>
+    <div style="width: 50rem; margin: auto;">
+        <div class="row">
+            <div class="col-sm-12">
+                <form [formGroup] = "noteForm" (ngSubmit)="onNoteSubmit()">
+                    <div class="from-group">
+                        <label for="note">Add note</label>
+                        <textarea name="note" id="note" rows="3" 
+                            class="form-control" formControlName="note"
+                            [ngClass]="{ 'error' : isInvalid('note') }"></textarea>
+                    </div>
 
-                <span *ngIf="isIncomplete()">
-                    You have an incomplete note
-                </span>
-                
-                <button *ngIf="!isIncomplete()"
-                    type="submit"
-                    class="btn.btn-primary">Submit</button>
-            </form>
+                    <span *ngIf="isIncomplete()">
+                        You have an incomplete note
+                    </span>
+                    
+                    <button *ngIf="!isIncomplete()"
+                        type="submit"
+                        class="btn btn-green-outline">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

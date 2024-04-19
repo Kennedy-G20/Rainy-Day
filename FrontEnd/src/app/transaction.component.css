@@ -23,12 +23,12 @@
 
 .error { background-color: #fff0f0 ; }
 
-.btn{
+.btn-green-outline {
     background-color: white;
     color: rgb(12, 120, 93);
     border: 1px solid rgb(12, 120, 93);
 }
 
-.btn:hover {
+.btn-green-outline :hover {
   background-color: rgb(207, 239, 232);
 }
