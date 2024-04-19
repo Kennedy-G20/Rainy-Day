@@ -1,5 +1,5 @@
 .card {
-    background-color: rgb(12, 120, 93);
+    background-color: #007ab3;
   }
 
 .card-data{ 
@@ -21,14 +21,14 @@
   padding: 0.4rem;
 }
 
-.error { background-color: #fff0f0 ; }
+.error { background-color: #fff0f0; }
 
 .btn-green-outline {
     background-color: white;
-    color: rgb(12, 120, 93);
-    border: 1px solid rgb(12, 120, 93);
+    color: #007ab3;
+    border: 1px solid #007ab3;
 }
 
 .btn-green-outline :hover {
-  background-color: rgb(207, 239, 232);
+  background-color: #e6f7ff;
 }

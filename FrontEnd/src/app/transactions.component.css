@@ -1,5 +1,5 @@
 .card {
-    background-color: rgb(12, 120, 93);
+    background-color: #007ab3;
   }
 
 .card-amount {
@@ -10,10 +10,10 @@
 
 .submit-btn{
     background-color: white;
-    color: rgb(12, 120, 93);
-    border: 1px solid rgb(12, 120, 93);
+    color: #007ab3;
+    border: 1px solid #007ab3;
 }
 
 .submit-btn:hover {
-  background-color: rgb(207, 239, 232);
+  background-color: #e6f7ff ;
 }
