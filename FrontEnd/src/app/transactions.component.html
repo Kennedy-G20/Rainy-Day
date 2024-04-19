@@ -49,7 +49,7 @@
   </div>
 
   <div class="mb-3" style="text-align: center;">
-    <select class="form-select" style="width: 10rem; margin: auto;">
+    <select class="form-select" style="width: 10rem; margin: auto;" (change)="onTransactionDirectionSelect($event)">
       <option value="All">All</option>
       <option value="In">In</option>
       <option value="Out">Out</option>

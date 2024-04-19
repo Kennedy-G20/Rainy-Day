@@ -16,8 +16,8 @@ export class WebService {
     balance_list: any;
     search_transactions_list: any;
 
-    getTransactions(accessToken: string, page: number) {
-      const url = 'http://127.0.0.1:5000/api/transactions?pn=' + page;
+    getTransactions(accessToken: string, transaction_direction: string, page: number) {
+      const url = 'http://127.0.0.1:5000/api/transactions?td=' + transaction_direction + '&pn=' + page;
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.get<any>(url, { headers }
       ).subscribe((response: any) => {
@@ -47,7 +47,7 @@ export class WebService {
       });
       return this.http.post<any>(url, postData, { headers }
       ).subscribe((response: any) => {
-        this.getTransactions(accessToken, page)
+        this.getTransactions(accessToken, "all", page)
       });
   }
 
