@@ -72,7 +72,6 @@ export class TransactionsComponent {
       this.showTransactionForm = !this.showTransactionForm;
     }
 
-
   onSubmit() {
     const transactionData = this.transactionForm.value;
 
@@ -81,6 +80,28 @@ export class TransactionsComponent {
         response.tokens?.accessToken.toString() as string, transactionData, this.page)
         ).catch((error) => console.log(error));
     this.transactionForm.reset();
+  }
+
+  isInvalid(control: any) {
+    return this.transactionForm.controls[control].invalid &&
+      this.transactionForm.controls[control].touched;
+  }
+  
+  isUnTouched() {
+    return this.transactionForm.controls.description.pristine ||
+            this.transactionForm.controls.transaction_direction.pristine ||
+            this.transactionForm.controls.amount.pristine ||
+            this.transactionForm.controls.category.pristine ||
+            this.transactionForm.controls.date.pristine;
+  }
+  
+  isIncomplete() {
+    return this.isInvalid('description') ||
+          this.isInvalid('transaction_direction') ||
+          this.isInvalid('amount') ||
+          this.isInvalid('category') ||
+          this.isInvalid('date') ||
+          this.isUnTouched();
   }
 
   onTransactionDirectionSelect(event: Event) {
