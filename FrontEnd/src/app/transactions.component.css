@@ -17,3 +17,11 @@
 .submit-btn:hover {
   background-color: #e6f7ff ;
 }
+
+h2 {
+  color: #20526a !important;
+  text-align: center;
+  margin: 20px;
+}
+
+.error { background-color: #fff0f0; }
