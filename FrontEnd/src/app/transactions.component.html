@@ -34,7 +34,7 @@
         <input type="date" class="form-control" id="date" formControlName="date" [ngClass]="{ 'error' : isInvalid('date') }">
       </div>
       <span *ngIf="isIncomplete()">
-        Note is empty
+        All fields must be completed to submit
       </span>
       <button *ngIf="!isIncomplete()" type="submit" class="btn submit-btn" style="margin-top: 20px;">Submit</button>
     </form>
