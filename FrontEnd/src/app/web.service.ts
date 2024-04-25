@@ -17,7 +17,7 @@ export class WebService {
     search_transactions_list: any;
 
     getTransactions(accessToken: string, transaction_direction: string, page: number) {
-      const url = 'http://127.0.0.1:5000/api/transactions?td=' + transaction_direction + '&pn=' + page;
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions?td=' + transaction_direction + '&pn=' + page;
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.get<any>(url, { headers }
       ).subscribe((response: any) => {
@@ -29,7 +29,7 @@ export class WebService {
     getTransaction(accessToken: string, id: any) {
       this.transactionID = id;
 
-      const url = 'http://127.0.0.1:5000/api/transactions/' + id;
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id;
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.get<any>(url, { headers }
       ).subscribe((response: any) => {
@@ -39,7 +39,7 @@ export class WebService {
 
 
     postTransaction(accessToken: string, transactionData: any, page: number) {
-      const url = 'http://127.0.0.1:5000/api/transactions';
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       let postData = new FormData();
       Object.keys(transactionData).forEach(key => {
@@ -66,7 +66,7 @@ export class WebService {
           updatedTransaction[key] = oldValue;
       }
     }
-    const url = 'http://127.0.0.1:5000/api/transactions/' + id;
+    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id;
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
     let postData = new FormData();
     Object.keys(updatedTransaction).forEach(key => {
@@ -82,7 +82,7 @@ export class WebService {
   deleteTransaction(accessToken: string, id: any) {
     this.transactionID = id;
 
-    const url = 'http://127.0.0.1:5000/api/transactions/' + id;
+    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id;
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
     return this.http.delete<any>(url, { headers }
     ).subscribe((response: any) => {
@@ -92,7 +92,7 @@ export class WebService {
 
 
     getNotes(accessToken: string, id: any) {
-      const url = 'http://127.0.0.1:5000/api/transactions/' + id + '/notes';
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id + '/notes';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.get<any>(url, { headers }
       ).subscribe((response: any) => {
@@ -105,7 +105,7 @@ export class WebService {
       let postData = new FormData();
       postData.append("note", note);
 
-      const url = 'http://127.0.0.1:5000/api/transactions/' + this.transactionID + '/notes';
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + this.transactionID + '/notes';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.post<any>(url, postData, { headers }
       ).subscribe((response: any) => {
@@ -118,7 +118,7 @@ export class WebService {
       let postData = new FormData();
       postData.append("note", note);
 
-      const url = 'http://127.0.0.1:5000/api/transactions/' + this.transactionID + '/notes/' + noteId;
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + this.transactionID + '/notes/' + noteId;
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.put<any>(url, postData, { headers }
       ).subscribe((response: any) => {
@@ -135,7 +135,7 @@ export class WebService {
           }
       }
 
-      const url = 'http://127.0.0.1:5000/api/transactions/' + this.transactionID + '/notes/' + noteId;
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + this.transactionID + '/notes/' + noteId;
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
       return this.http.delete<any>(url, { headers }
       ).subscribe((response: any) => {
@@ -144,7 +144,7 @@ export class WebService {
 }
 
   getCategories(accessToken: string) {
-    const url = 'http://127.0.0.1:5000/api/categories';
+    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/categories';
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
     return this.http.get<any>(url, { headers }
     ).subscribe((response: any) => {
@@ -154,7 +154,7 @@ export class WebService {
 
 
   getCategory(accessToken: string, category_name: String) {
-    const url = 'http://127.0.0.1:5000/api/categories/' + category_name;
+    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/categories/' + category_name;
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
     return this.http.get<any>(url, { headers }
     ).subscribe((response: any) => {
@@ -186,7 +186,7 @@ export class WebService {
   }
 
   getSearch(accessToken: string, search_value: any) {
-    const url = 'http://127.0.0.1:5000/api/search?q=' + search_value;
+    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/search?q=' + search_value;
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
     return this.http.get<any>(url, { headers }
     ).subscribe((response: any) => {

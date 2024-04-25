@@ -177,7 +177,7 @@ def add_transaction(user_id):
         }
         container.create_item(body=new_transaction)
 
-        new_transaction_link = "http://127.0.0.1:5000/api/transactions/{}/{}".format(user_id, id)
+        new_transaction_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/{}".format(user_id, id)
         return make_response( jsonify( { "url" : new_transaction_link} ), 201 )
     else:
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
@@ -200,7 +200,7 @@ def edit_transaction(user_id, transaction_id):
         item['category'] = category
         item['date'] = date
         container.upsert_item(body=item)
-        edited_transaction_link = "http://127.0.0.1:5000/api/transactions/{}/{}".format(user_id, transaction_id)
+        edited_transaction_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/{}".format(user_id, transaction_id)
         return make_response( jsonify( { "url" : edited_transaction_link} ), 201 )
     else:
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
@@ -250,7 +250,7 @@ def add_new_note(user_id, transaction_id):
         print(new_note)
         transaction['notes'].append(new_note)
         container.upsert_item(body=transaction)
-        new_note_link = "http://127.0.0.1:5000/api/transactions/{}/notes/{}".format(transaction_id, note_id)
+        new_note_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/notes/{}".format(transaction_id, note_id)
         return make_response( jsonify( { "url" : new_note_link } ), 201 )
     else:
         return make_response(jsonify({"error": "Invalid transaction ID"}), 404)
@@ -293,7 +293,7 @@ def edit_note(user_id, transaction_id, note_id):
         if note["_id"] == note_id:
             note["note"] = edited_note
             container.upsert_item(body=item)
-    edited_note_link = "http://127.0.0.1:5000/api/transactions/{}/notes/{}".format(transaction_id, note_id)
+    edited_note_link = "https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/{}/notes/{}".format(transaction_id, note_id)
     return make_response( jsonify( { "url" : edited_note_link } ), 200 )
     
 
