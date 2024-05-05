@@ -178,9 +178,9 @@ export class WebService {
     const balance = totalIncome - totalOutcome;
   
     const spendings_list = {
-      'total_income': totalIncome,
-      'total_outcome': totalOutcome,
-      'balance': balance
+      'total_income': parseFloat(totalIncome.toFixed(2)),
+      'total_outcome': parseFloat(totalOutcome.toFixed(2)),
+      'balance': parseFloat(balance.toFixed(2))
     };  
     return spendings_list;
   }
