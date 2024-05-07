@@ -21,12 +21,14 @@ export class NavComponent {
         this.openDropdown = !this.openDropdown;
     }
 
+    // Navigates user to search result page & stores search value in session storage
     onSearch(search_value: string) {;
       this.resetSearch();
       sessionStorage['search_value'] = search_value;
       this.router.navigate(['/search', search_value]);
     }
 
+    // If user makes a search request from the result page this ensures the page and search value are reset
     resetSearch() {
       sessionStorage.removeItem('search_value');
       if (this.router.url.startsWith('/search')) {

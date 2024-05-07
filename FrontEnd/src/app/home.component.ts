@@ -35,12 +35,14 @@ export class HomeComponent {
       this.transaction_direction = String(sessionStorage['transaction_direction'])
     }
 
+    // Get transactions to display most recent on Dashboard
     fetchAuthSession().then((response
       ) => this.webService.getTransactions(
       response.tokens?.accessToken.toString() as string, this.transaction_direction, this.page)
       ).catch((error) => console.log(error));
 
 
+    // Get categories to display on Dashboard
     fetchAuthSession().then((response
       ) => this.webService.getCategories(
       response.tokens?.accessToken.toString() as string)
@@ -48,6 +50,7 @@ export class HomeComponent {
 
   }
 
+  // Used to get current users Cognito details
   async getCurrentUserDetails() {
     try {
       const { username, userId, signInDetails } = await getCurrentUser();
@@ -58,6 +61,7 @@ export class HomeComponent {
     }
   }
 
+  // Used to get current users Cognito Token
   async getCurrentSession() {
     try {
       const { accessToken, idToken } = (await fetchAuthSession({ forceRefresh: true })).tokens ?? {};
