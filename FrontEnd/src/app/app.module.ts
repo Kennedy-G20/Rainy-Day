@@ -17,8 +17,10 @@ import { SearchResultComponent } from './search-result.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav.component';
 
+// Configure AWS Amplify SDk
 Amplify.configure(awsconfig);
 
+// Define Router 
 var routes: any = [
   {
     path: '',

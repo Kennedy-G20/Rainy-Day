@@ -18,6 +18,7 @@ export class CategoriesComponent {
 
     }
 
+    // Call to web service to get categories list
     getCategoriesList(){
         fetchAuthSession().then((response
         ) => this.webService.getCategories(

@@ -16,11 +16,13 @@ export class SearchResultComponent {
     search_value: any;
 
     ngOnInit() {
+        // Retrieve search value from session storage
         this.search_value = sessionStorage.getItem('search_value');
         this.getSearchResult(this.search_value);
 
     }
 
+    // Call to web service to get search results
     getSearchResult(search_value: String){
         fetchAuthSession().then((response
           ) => this.webService.getSearch(

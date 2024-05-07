@@ -16,6 +16,8 @@ export class WebService {
     balance_list: any;
     search_transactions_list: any;
 
+
+    // GET transactions
     getTransactions(accessToken: string, transaction_direction: string, page: number) {
       const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions?td=' + transaction_direction + '&pn=' + page;
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
@@ -26,6 +28,7 @@ export class WebService {
   }
 
 
+    // GET single transaction
     getTransaction(accessToken: string, id: any) {
       this.transactionID = id;
 
@@ -38,6 +41,7 @@ export class WebService {
   }
 
 
+    // ADD transaction
     postTransaction(accessToken: string, transactionData: any, page: number) {
       const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
@@ -52,6 +56,7 @@ export class WebService {
   }
 
 
+    // EDIT Transaction
     putTransaction(accessToken: string, id: any, editedTransaction: any){
     const updatedTransaction: any = {}
     this.oldTransactionForm = this.transactions_list.find((transaction: { id: any; }) => transaction.id === id);
@@ -79,18 +84,20 @@ export class WebService {
   }
 
 
-  deleteTransaction(accessToken: string, id: any) {
-    this.transactionID = id;
+    // DELETE Transaction
+    deleteTransaction(accessToken: string, id: any) {
+      this.transactionID = id;
 
-    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id;
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
-    return this.http.delete<any>(url, { headers }
-    ).subscribe((response: any) => {
-        this.transactions_list = response
-    });
-}
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id;
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      return this.http.delete<any>(url, { headers }
+      ).subscribe((response: any) => {
+          this.transactions_list = response
+      });
+  }
 
 
+    // GET Notes
     getNotes(accessToken: string, id: any) {
       const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/transactions/' + id + '/notes';
       const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
@@ -100,7 +107,8 @@ export class WebService {
       });
   }
 
-  
+
+    // ADD Note
     postNote(accessToken: string, note: string) {
       let postData = new FormData();
       postData.append("note", note);
@@ -114,6 +122,7 @@ export class WebService {
   }
 
 
+    // EDIT Note
     putNote(accessToken: string, noteId: any, note: string){
       let postData = new FormData();
       postData.append("note", note);
@@ -127,6 +136,7 @@ export class WebService {
   }
 
 
+    // DELETE Note
     deleteNote(accessToken: string, noteId: any) {
       const updated_notes: any = [];
       for (let i = 0; i < this.notes_list.length; i++) {
@@ -143,56 +153,62 @@ export class WebService {
       });
 }
 
-  getCategories(accessToken: string) {
-    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/categories';
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
-    return this.http.get<any>(url, { headers }
-    ).subscribe((response: any) => {
-      this.categories_list = response
-    });
-}
 
-
-  getCategory(accessToken: string, category_name: String) {
-    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/categories/' + category_name;
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
-    return this.http.get<any>(url, { headers }
-    ).subscribe((response: any) => {
-        this.category_transactions_list = response
-        this.balance_list = this.calculateCategoryBalance();
-    });
-  }
-
-  calculateCategoryBalance(): any {
-    let totalIncome = 0;
-    let totalOutcome = 0;
-
-    for (const transaction of this.category_transactions_list) {
-      if (transaction.transaction_direction === 'income') {
-        totalIncome += parseFloat(transaction.amount);
-      } else if (transaction.transaction_direction === 'outcome') {
-        totalOutcome += parseFloat(transaction.amount);
-      }
+    // GET list of categories 
+    getCategories(accessToken: string) {
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/categories';
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      return this.http.get<any>(url, { headers }
+      ).subscribe((response: any) => {
+        this.categories_list = response
+      });
     }
 
-    const balance = totalIncome - totalOutcome;
-  
-    const spendings_list = {
-      'total_income': parseFloat(totalIncome.toFixed(2)),
-      'total_outcome': parseFloat(totalOutcome.toFixed(2)),
-      'balance': parseFloat(balance.toFixed(2))
-    };  
-    return spendings_list;
-  }
 
-  getSearch(accessToken: string, search_value: any) {
-    const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/search?q=' + search_value;
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
-    return this.http.get<any>(url, { headers }
-    ).subscribe((response: any) => {
-      this.search_transactions_list = response
-    });
-  }
+    // GET transactions in given category
+    getCategory(accessToken: string, category_name: String) {
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/categories/' + category_name;
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      return this.http.get<any>(url, { headers }
+      ).subscribe((response: any) => {
+          this.category_transactions_list = response
+          this.balance_list = this.calculateCategoryBalance();
+      });
+    }
+
+    // Summary calculations for category stored as key value pairs
+    calculateCategoryBalance(): any {
+      let totalIncome = 0;
+      let totalOutcome = 0;
+
+      for (const transaction of this.category_transactions_list) {
+        if (transaction.transaction_direction === 'income') {
+          totalIncome += parseFloat(transaction.amount);
+        } else if (transaction.transaction_direction === 'outcome') {
+          totalOutcome += parseFloat(transaction.amount);
+        }
+      }
+
+      const balance = totalIncome - totalOutcome;
+    
+      const spendings_list = {
+        'total_income': parseFloat(totalIncome.toFixed(2)),
+        'total_outcome': parseFloat(totalOutcome.toFixed(2)),
+        'balance': parseFloat(balance.toFixed(2))
+      };  
+      return spendings_list;
+    }
+
+
+    // GET search results
+    getSearch(accessToken: string, search_value: any) {
+      const url = 'https://fgadyhtyd3.us-east-1.awsapprunner.com/api/search?q=' + search_value;
+      const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + accessToken });
+      return this.http.get<any>(url, { headers }
+      ).subscribe((response: any) => {
+        this.search_transactions_list = response
+      });
+    }
   
 
 }
