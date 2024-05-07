@@ -10,6 +10,8 @@ import jwt
 from functools import wraps
 
 
+# Wrapper function for ensuring authenticated user
+# Accesses bearer token for current logged in user and returns username
 def jwt_required(func):
     @wraps(func)
     def jwt_required_wrapper(*args, **kwargs):
@@ -26,52 +28,36 @@ def jwt_required(func):
         return func(*args, **kwargs, user_id=user_id)
     return jwt_required_wrapper
 
+
+# Set up Flask app
 app = Flask(__name__)
 CORS(app)
 
-# defining db
+
+# Defining Cosmos DB settings
 settings = {
     'host': os.environ.get('ACCOUNT_HOST', 'https://rainy-day-b00806336-gk.documents.azure.com:443/'),
     'master_key': os.environ.get('ACCOUNT_KEY', 'AfyR1IGqlXiwFsPwoDW5STjKSn4DTPM34WLPPzPo11VBN2d1m7LerVbLTMt0xCybS8MWdLza8f7LACDbOGtpFA==')
 }
 
+# Defining Cosmos DB client
 client = cosmos_client.CosmosClient(
     settings['host'],
     {'masterKey': settings['master_key']}, 
     user_agent="CosmosDBPythonQuickstart", 
     user_agent_overwrite=True)
 
+# Getting database and container
 db = client.get_database_client("RainyDay")
 container = db.get_container_client("RainyDay")
 
 
 
-# # GET transactions of all users
-# @app.route("/api/transactions", methods = ["GET"])
-# def show_all_transactions():
-#     page_num, page_size = 1, 10
-#     if request.args.get('pn'):
-#         page_num = int(request.args.get('pn'))
-#     if request.args.get('ps'):
-#         page_size = int(request.args.get('ps'))
-#     page_start = (page_size * (page_num - 1))
-
-#     data_to_return = []
-#     item_list = list(container.read_all_items(max_item_count=10))
-# # for transaction in transactions.find().skip(page_start).limit(page_size):
-#     for transaction in item_list:
-#         transaction['id'] = str(transaction['id'])
-#         for note in transaction['notes']:
-#             note['id'] = str(note['id'])
-#         data_to_return.append(transaction)
-
-#     return make_response( jsonify( data_to_return ), 200 )
-
-
-# GET all transactions of a single user
+# GET all transactions of a single user endpoint
 @app.route("/api/transactions", methods = ["GET"])
 @jwt_required
 def show_all_user_transactions(user_id):
+    # Get page number argument for pagination
     page_num, page_size = 1, 10
     if request.args.get('pn'):
         page_num = int(request.args.get('pn'))
@@ -79,6 +65,8 @@ def show_all_user_transactions(user_id):
         page_size = int(request.args.get('ps'))
     page_start = (page_size * (page_num - 1))
 
+    # Get filter argument for what transactions (in/out/all)
+    # Sorted by most recent
     transaction_direction = request.args.get('td')
     if transaction_direction == "in":
         user_transactions = list(container.query_items(
@@ -97,12 +85,12 @@ def show_all_user_transactions(user_id):
         ))
 
     if len(user_transactions) == 0:
-        raise exceptions.CosmosResourceExistsError(user_id) #add own exception for this
+        return make_response( jsonify( { "error" : "No transactions for user" } ), 404 )
     
     return make_response( jsonify( user_transactions ), 200 )
 
 
-# GET all of a users transaction categories
+# GET all of a users transaction categories endpoint
 @app.route("/api/categories", methods = ["GET"])
 @jwt_required
 def show_all_user_categories(user_id):
@@ -114,12 +102,12 @@ def show_all_user_categories(user_id):
     category_names = [category['category'] for category in user_categories]
 
     if len(user_categories) == 0:
-        raise exceptions.CosmosResourceExistsError(user_id) #add own exception for this
+        return make_response( jsonify( { "error" : "No transactions for user" } ), 404 )
     
     return make_response( jsonify( category_names ), 200 )
 
 
-# GET all transactions of a single user - from a category
+# GET all transactions from a category endpoint
 @app.route("/api/categories/<string:category_name>", methods = ["GET"])
 @jwt_required
 def show_all_user_transactions_in_category(user_id, category_name):
@@ -130,18 +118,19 @@ def show_all_user_transactions_in_category(user_id, category_name):
         page_size = int(request.args.get('ps'))
     page_start = (page_size * (page_num - 1))
 
+    # Sorted by most recent
     user_trasactions = list(container.query_items(
         f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.category='{category_name}' ORDER BY t.date DESC OFFSET {page_start} LIMIT {page_size}",
         enable_cross_partition_query=True,
     ))
 
     if len(user_trasactions) == 0:
-        raise exceptions.CosmosResourceExistsError(user_id) #add own exception for this
+        return make_response( jsonify( { "error" : "No transactions for category" } ), 404 )
     
     return make_response( jsonify( user_trasactions ), 200 )
 
 
-# GET one transaction
+# GET one transaction endpoint
 @app.route("/api/transactions/<string:transaction_id>", methods = ["GET"])
 @jwt_required
 def show_one_transaction(user_id, transaction_id):
@@ -159,10 +148,11 @@ def show_one_transaction(user_id, transaction_id):
             return make_response( jsonify( { "error" : "Invalid transaction ID" } ), 404 )
 
 
-# ADD a transaction
+# ADD a transaction endpoint
 @app.route("/api/transactions", methods=["POST"])
 @jwt_required
 def add_transaction(user_id):
+    # Verify form contains all data
     if "description" in request.form and "transaction_direction" in request.form and "amount" in request.form and "category" in request.form and "date" in request.form:
         id = str(uuid.uuid1())
         new_transaction = {
@@ -183,10 +173,11 @@ def add_transaction(user_id):
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
     
 
-# EDIT transaction
+# EDIT transaction endpoint
 @app.route("/api/transactions/<string:transaction_id>", methods=["PUT"])
 @jwt_required
 def edit_transaction(user_id, transaction_id):
+    # Verify form contains all data
     if "description" in request.form and "transaction_direction" in request.form and "amount" in request.form and "category" in request.form and "date" in request.form:
         description = request.form["description"]
         transaction_direction = request.form["transaction_direction"]
@@ -206,14 +197,16 @@ def edit_transaction(user_id, transaction_id):
         return make_response(jsonify( { "error" : "Missing form data" } ), 404 )
     
 
-# DELETE transaction
+# DELETE transaction endpoint
 @app.route("/api/transactions/<string:transaction_id>", methods=["DELETE"])
 @jwt_required
 def delete_transaction(user_id, transaction_id):
+    # Check transaction exists
     transaction_list = list(container.query_items(
         f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND t.id='{transaction_id}'",
         enable_cross_partition_query=True,
     ))
+    # Delete
     if len(transaction_list) >= 1:
         response = container.delete_item(item=transaction_id, partition_key=user_id)
         return make_response( jsonify( {} ), 204 )
@@ -221,11 +214,13 @@ def delete_transaction(user_id, transaction_id):
         return make_response( jsonify( { "error" : "Invalid transaction ID" } ), 404 )
 
 
-# Search transactions
+# Search transactions endpoint
 @app.route("/api/search", methods=["GET"])
 @jwt_required
 def search_transactions(user_id):
+    # Get keyword argument and make lowercase
     query = request.args.get('q').lower()
+    # Check for value within database
     if query:
         search_results = list(container.query_items(
             f"SELECT * FROM {container.id} t WHERE t.userID='{user_id}' AND CONTAINS(LOWER(t.description), '{query}')",
@@ -236,11 +231,13 @@ def search_transactions(user_id):
         return make_response(jsonify({"error": "Nothing matches this search"}), 400) 
 
 
-# ADD a new note
+# ADD a new note endpoint
 @app.route("/api/transactions/<string:transaction_id>/notes", methods=["POST"])
 @jwt_required
 def add_new_note(user_id, transaction_id):
+    # Get current transaction from DB
     transaction = container.read_item(item=transaction_id, partition_key=user_id)
+    # If transaction exits, note attribute is created with unique ID
     if transaction:
         note_id = str(uuid.uuid1())
         new_note = { 
@@ -256,11 +253,13 @@ def add_new_note(user_id, transaction_id):
         return make_response(jsonify({"error": "Invalid transaction ID"}), 404)
     
 
-# GET all notes for a single transaction
+# GET all notes for a single transaction endpoint
 @app.route("/api/transactions/<string:transaction_id>/notes", methods=["GET"])
 @jwt_required
 def fetch_all_notes(user_id, transaction_id):
+    # Get current transaction from DB
     transaction = container.read_item(item=transaction_id, partition_key=user_id)
+    # If transaction exits, list all notes
     if transaction:
         notes = transaction.get('notes', [])
         data_to_return = []
@@ -271,7 +270,7 @@ def fetch_all_notes(user_id, transaction_id):
         return make_response(jsonify({"error": "Invalid transaction ID"}), 404)
     
 
-# GET a specific single note from a transaction
+# GET a specific single note from a transaction endpoint
 @app.route("/api/transactions/<string:transaction_id>/notes/<string:note_id>", methods=["GET"])
 @jwt_required
 def fetch_one_note(user_id, transaction_id, note_id):
@@ -283,13 +282,15 @@ def fetch_one_note(user_id, transaction_id, note_id):
     return jsonify(notes_list[0]), 200
 
 
-# EDIT a note
+# EDIT a note endpoint
 @app.route("/api/transactions/<string:transaction_id>/notes/<string:note_id>", methods=["PUT"])
 @jwt_required
 def edit_note(user_id, transaction_id, note_id):
     edited_note = request.form["note"]
+    # Get current transaction from DB
     item = container.read_item(item=transaction_id, partition_key=user_id)
     for note in item["notes"]:
+        # Get current note and update with new note data
         if note["_id"] == note_id:
             note["note"] = edited_note
             container.upsert_item(body=item)
@@ -297,13 +298,17 @@ def edit_note(user_id, transaction_id, note_id):
     return make_response( jsonify( { "url" : edited_note_link } ), 200 )
     
 
-# DELETE a note
+# DELETE a note endpoint
 @app.route("/api/transactions/<string:transaction_id>/notes/<string:note_id>", methods=["DELETE"])
 @jwt_required
 def delete_note(user_id, transaction_id, note_id):
+    # Get current transaction from DB
     item = container.read_item(item=transaction_id, partition_key=user_id)
+    # New list for notes
     new_notes_list = []
     deleted_count = 0
+    # Append all notes except deleted note
+    # Count deletions
     for note in item["notes"]:
         if note["_id"] == note_id:
             deleted_count += 1
@@ -317,7 +322,7 @@ def delete_note(user_id, transaction_id, note_id):
         return make_response( jsonify( { "error" : "Invalid Note ID" } ), 404 )
 
 
+# Execute Flask
 if __name__ == "__main__":
     app.run(debug = True, host="0.0.0.0", port=5000)
-    # serve(app, host="0.0.0.0", port=5000)
     
